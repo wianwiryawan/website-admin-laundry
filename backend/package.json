@@ -1,17 +1,17 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "wianwiryawan@gmail.com",
   "license": "ISC",
-  "description": "",
+  "description": "Laundry app with auth, CRUD functionality, and can generate report based on data.",
   "dependencies": {
+    "@dotenvx/dotenvx": "^0.10.6",
     "cors": "^2.8.5",
-    "dotenv": "^17.0.0",
     "express": "^5.1.0",
     "pg": "^8.16.3"
   }
