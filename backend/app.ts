@@ -28,5 +28,3 @@ app.post('/add-user', async (req: Request, res: Response) => {
 
 const PORT = process.env.NODE_PORT || 3002;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-console.log(process.env.NODE_PORT);
