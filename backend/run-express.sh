@@ -8,4 +8,4 @@ export NVM_DIR="$HOME/.nvm"
 nvm use lts/jod
 
 # Run your Next.js app
-dotenvx run -- node app.js
+dotenvx run -- npx tsx app.ts
