@@ -15,4 +15,8 @@ pool.on('connect', () => {
   console.log('✅ PostgreSQL connected');
 });
 
+pool.on('release', () => {
+  console.log('✅ PostgreSQL released');
+})
+
 export const db = drizzle(pool, { schema });
