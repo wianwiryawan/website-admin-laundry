@@ -1,7 +1,5 @@
 import { pgSchema, serial, boolean, smallint, varchar, numeric,integer, date } from "drizzle-orm/pg-core";
-import { sql } from "drizzle-orm"
 
-const dbSchema = 'data';
 export const mySchema = pgSchema("data");
 
 export const users = mySchema.table(`users`, {
