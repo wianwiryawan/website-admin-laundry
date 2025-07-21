@@ -3,6 +3,7 @@ import cors from 'cors';
 import { db } from './src/database/drizzle/db';
 import { customers, perfumes, transactions } from './src/database/drizzle/schema/data';
 import userRoutes from './src/feature/users/users.routes';
+import customerRoutes from './src/feature/customers/customers.routes';
 
 const app: Application = express();
 
@@ -23,15 +24,8 @@ app.get('/api', (req: Request, res: Response) => {
 // Mount the users routes
 app.use('/user-management/users', userRoutes);
 
-app.get('/customer-management/customers', async (req: Request, res: Response) => {
-  const allCustomers = await db.select().from(customers);
-  res.json(allCustomers);
-});
-
-app.get('/customer-management/customers/:id', async (req: Request, res: Response) => {
-  const allCustomers = await db.select().from(customers);
-  res.json(allCustomers);
-});
+// Mount the customer routes
+app.use('/customer-management/customers', customerRoutes);
 
 app.get('/perfumes-management/perfumes', async (req: Request, res: Response) => {
   const allPerfumes = await db.select().from(perfumes);
