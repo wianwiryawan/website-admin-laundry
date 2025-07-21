@@ -9,7 +9,15 @@ export const getAllUsers = async (req: Request, res: Response) => {
 };
 
 export const createUser = async (req: Request, res: Response) => {
-    const { username, status, email } = req.body;
-    const addUser = await usersService.createAllUsers({ username, status, email });
+    const { 
+        username, 
+        status, 
+        email 
+    } = req.body;
+    const addUser = await usersService.createUser({ 
+        username, 
+        status, 
+        email 
+    });
     res.status(201).json(addUser);
 };

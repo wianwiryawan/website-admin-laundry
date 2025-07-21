@@ -8,7 +8,12 @@ export const getAllUsers = async () => {
     return db.select().from(users);
 }
 
-export const createAllUsers = async (user: { username: string; email: string; status?: number }) => {
+export const createUser = async (
+    user: { 
+        username: string; 
+        email: string; 
+        status?: number; 
+    }) => {
     const result = createUserSchema.safeParse(user);
     if (!result.success){
         // Handle validation error (throw, return, or log)
