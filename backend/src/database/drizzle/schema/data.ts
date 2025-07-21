@@ -17,8 +17,8 @@ export const perfumes = mySchema.table(`perfumes`, {
     status: smallint("status"),
 });
 
-export const services = mySchema.table(`services`, {
-    services_id: serial("services_id").primaryKey(),
+export const services = mySchema.table(`laundry_services`, {
+    services_id: serial("laundry_services_id").primaryKey(),
     service_name: varchar("service_name", { length: 100 }).notNull(),
     price: numeric("price"),
     status: smallint("status"),

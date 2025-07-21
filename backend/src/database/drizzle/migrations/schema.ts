@@ -4,6 +4,13 @@ import { sql } from "drizzle-orm"
 export const data = pgSchema("data");
 
 
+export const laundryServicesInData = data.table("laundry_services", {
+	servicesId: serial("services_id").primaryKey().notNull(),
+	serviceName: varchar("service_name", { length: 100 }).notNull(),
+	price: numeric(),
+	status: smallint(),
+});
+
 export const perfumesInData = data.table("perfumes", {
 	perfumesId: serial("perfumes_id").primaryKey().notNull(),
 	perfumeName: varchar("perfume_name", { length: 50 }).notNull(),
@@ -20,13 +27,6 @@ export const customersInData = data.table("customers", {
 	waAvailable: boolean("wa_available"),
 	lastTransaction: date("last_transaction"),
 	address: varchar({ length: 150 }),
-});
-
-export const servicesInData = data.table("services", {
-	servicesId: serial("services_id").primaryKey().notNull(),
-	serviceName: varchar("service_name", { length: 100 }).notNull(),
-	price: numeric(),
-	status: smallint(),
 });
 
 export const usersInData = data.table("users", {
@@ -51,7 +51,7 @@ export const transactionsInData = data.table("transactions", {
 		}),
 	foreignKey({
 			columns: [table.serviceId],
-			foreignColumns: [servicesInData.servicesId],
+			foreignColumns: [laundryServicesInData.servicesId],
 			name: "transactions_service_id_services_services_id_fk"
 		}),
 	foreignKey({

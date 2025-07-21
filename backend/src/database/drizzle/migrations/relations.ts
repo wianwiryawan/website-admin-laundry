@@ -1,14 +1,14 @@
 import { relations } from "drizzle-orm/relations";
-import { customersInData, transactionsInData, servicesInData, perfumesInData } from "./schema";
+import { customersInData, transactionsInData, laundryServicesInData, perfumesInData } from "./schema";
 
 export const transactionsInDataRelations = relations(transactionsInData, ({one}) => ({
 	customersInDatum: one(customersInData, {
 		fields: [transactionsInData.customerId],
 		references: [customersInData.customersId]
 	}),
-	servicesInDatum: one(servicesInData, {
+	laundryServicesInDatum: one(laundryServicesInData, {
 		fields: [transactionsInData.serviceId],
-		references: [servicesInData.servicesId]
+		references: [laundryServicesInData.servicesId]
 	}),
 	perfumesInDatum: one(perfumesInData, {
 		fields: [transactionsInData.perfumeId],
@@ -20,7 +20,7 @@ export const customersInDataRelations = relations(customersInData, ({many}) => (
 	transactionsInData: many(transactionsInData),
 }));
 
-export const servicesInDataRelations = relations(servicesInData, ({many}) => ({
+export const laundryServicesInDataRelations = relations(laundryServicesInData, ({many}) => ({
 	transactionsInData: many(transactionsInData),
 }));
 
