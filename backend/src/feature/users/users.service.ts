@@ -1,6 +1,6 @@
 import { db } from '../../database/drizzle/db';
 import { users } from './users.model';
-import { createUserSchema } from './users.schema';
+import { createUserValidation } from './users.validation';
 
 // Services: Handle business logic and talk to the database.
 
@@ -14,7 +14,7 @@ export const createUser = async (
         email: string; 
         status?: number; 
     }) => {
-    const result = createUserSchema.safeParse(user);
+    const result = createUserValidation.safeParse(user);
     if (!result.success){
         // Handle validation error (throw, return, or log)
         throw new Error(`Validation failed: ${result.error}`);

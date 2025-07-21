@@ -1,6 +1,6 @@
 import { db } from '../../database/drizzle/db';
 import { customers } from './customers.model';
-import { createCustomerSchema } from './customers.scheme';
+import { createCustomerValidation } from './customers.validation';
 // Services: Handle business logic and talk to the database.
 
 export const getAllCustomers = async () => {
@@ -16,7 +16,7 @@ export const createCustomer = async (
         last_transaction: string;
         address: string;
     }) => {
-    const result = createCustomerSchema.safeParse(customer);
+    const result = createCustomerValidation.safeParse(customer);
     if(!result.success){
         // Handle validation error (throw, return, or log)
         throw new Error(`Validation failed: ${result.error}`);
