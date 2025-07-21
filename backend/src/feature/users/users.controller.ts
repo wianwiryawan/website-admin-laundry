@@ -3,21 +3,21 @@ import * as usersService from './users.service';
 
 // Controllers: Handle HTTP request/response only.
 
-export const getAllUsers = async (req: Request, res: Response) => {
-    const users = await usersService.getAllUsers();
-    res.json(users);
+export const getAllUsersHandler = async (req: Request, res: Response) => {
+    const result = await usersService.getAllUsers();
+    res.json(result);
 };
 
-export const addUser = async (req: Request, res: Response) => {
+export const addUserHandler = async (req: Request, res: Response) => {
     const { 
         username, 
         status, 
         email 
     } = req.body;
-    const addUser = await usersService.addUser({ 
+    const result = await usersService.addUser({ 
         username, 
         status, 
         email 
     });
-    res.status(201).json(addUser);
+    res.status(201).json(result);
 };

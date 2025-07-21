@@ -4,9 +4,9 @@ import * as customerController from './customers.controller';
 const router = Router();
 
 // List all users
-router.get('/', customerController.getAllCustomers);
+router.get('/', customerController.getAllCustomersHandler);
 
 // Add new user
-router.post('/add', customerController.addCustomer);
+router.post('/add', customerController.addCustomerHandler);
 
 export default router;

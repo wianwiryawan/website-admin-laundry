@@ -4,10 +4,10 @@ import * as userController from './users.controller';
 const router = Router();
 
 // List all users
-router.get('/', userController.getAllUsers);
+router.get('/', userController.getAllUsersHandler);
 
 // Add new user
-router.post('/add', userController.addUser);
+router.post('/add', userController.addUserHandler);
 
 // You can add more routes here as needed:
 // router.get('/:id', UserController.getUserById);

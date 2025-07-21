@@ -8,7 +8,7 @@ export const getAllCustomers = async () => {
 };
 
 export const addCustomer = async (
-    customer: {
+    customerData: {
         customer_name: string;
         number_of_transaction: number;
         phone_number: string;
@@ -16,11 +16,11 @@ export const addCustomer = async (
         last_transaction: string;
         address: string;
     }) => {
-    const result = createCustomerValidation.safeParse(customer);
+    const result = createCustomerValidation.safeParse(customerData);
     if(!result.success){
         // Handle validation error (throw, return, or log)
         throw new Error(`Validation failed: ${result.error}`);
     };
     // Use validated data
-    return db.insert(customers).values(customer);
+    return db.insert(customers).values(customerData);
 };

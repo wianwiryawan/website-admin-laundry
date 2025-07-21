@@ -9,16 +9,16 @@ export const getAllUsers = async () => {
 }
 
 export const addUser = async (
-    user: { 
+    userData: { 
         username: string; 
         email: string; 
         status?: number; 
     }) => {
-    const result = createUserValidation.safeParse(user);
+    const result = createUserValidation.safeParse(userData);
     if (!result.success){
         // Handle validation error (throw, return, or log)
         throw new Error(`Validation failed: ${result.error}`);
     }
     // Use validated data
-    return db.insert(users).values(user);
+    return db.insert(users).values(userData);
 }

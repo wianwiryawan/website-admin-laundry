@@ -3,12 +3,12 @@ import * as customerService from './customers.service';
 
 // Controllers: Handle HTTP request/response only.
 
-export const getAllCustomers = async (req: Request, res: Response) => {
+export const getAllCustomersHandler = async (req: Request, res: Response) => {
     const customers = await customerService.getAllCustomers();
     res.json(customers);
 };
 
-export const addCustomer = async (req: Request, res: Response) => {
+export const addCustomerHandler = async (req: Request, res: Response) => {
     const {
         customer_name,
         number_of_transaction,
