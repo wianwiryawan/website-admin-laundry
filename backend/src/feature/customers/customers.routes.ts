@@ -7,6 +7,6 @@ const router = Router();
 router.get('/', customerController.getAllCustomers);
 
 // Add new user
-router.post('/add', customerController.createCustomer);
+router.post('/add', customerController.addCustomer);
 
 export default router;

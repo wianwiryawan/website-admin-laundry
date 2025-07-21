@@ -7,7 +7,7 @@ const router = Router();
 router.get('/', userController.getAllUsers);
 
 // Add new user
-router.post('/add', userController.createUser);
+router.post('/add', userController.addUser);
 
 // You can add more routes here as needed:
 // router.get('/:id', UserController.getUserById);

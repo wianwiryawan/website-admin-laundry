@@ -7,7 +7,7 @@ export const getAllCustomers = async () => {
     return db.select().from(customers);
 };
 
-export const createCustomer = async (
+export const addCustomer = async (
     customer: {
         customer_name: string;
         number_of_transaction: number;

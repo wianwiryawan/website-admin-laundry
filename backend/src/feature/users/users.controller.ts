@@ -8,13 +8,13 @@ export const getAllUsers = async (req: Request, res: Response) => {
     res.json(users);
 };
 
-export const createUser = async (req: Request, res: Response) => {
+export const addUser = async (req: Request, res: Response) => {
     const { 
         username, 
         status, 
         email 
     } = req.body;
-    const addUser = await usersService.createUser({ 
+    const addUser = await usersService.addUser({ 
         username, 
         status, 
         email 

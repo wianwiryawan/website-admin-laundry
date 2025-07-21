@@ -8,7 +8,7 @@ export const getAllUsers = async () => {
     return db.select().from(users);
 }
 
-export const createUser = async (
+export const addUser = async (
     user: { 
         username: string; 
         email: string; 

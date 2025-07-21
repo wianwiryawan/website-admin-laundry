@@ -8,7 +8,7 @@ export const getAllCustomers = async (req: Request, res: Response) => {
     res.json(customers);
 };
 
-export const createCustomer = async (req: Request, res: Response) => {
+export const addCustomer = async (req: Request, res: Response) => {
     const {
         customer_name,
         number_of_transaction,
@@ -17,7 +17,7 @@ export const createCustomer = async (req: Request, res: Response) => {
         last_transaction,
         address 
     } = req.body;
-    const addCustomer = await customerService.createCustomer({
+    const addCustomer = await customerService.addCustomer({
         customer_name,
         number_of_transaction,
         phone_number,
