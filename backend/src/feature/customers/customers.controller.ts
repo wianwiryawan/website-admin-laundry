@@ -4,8 +4,8 @@ import * as customerService from './customers.service';
 // Controllers: Handle HTTP request/response only.
 
 export const getAllCustomersHandler = async (req: Request, res: Response) => {
-    const customers = await customerService.getAllCustomers();
-    res.json(customers);
+    const result = await customerService.getAllCustomers();
+    res.json(result);
 };
 
 export const addCustomerHandler = async (req: Request, res: Response) => {
@@ -17,7 +17,7 @@ export const addCustomerHandler = async (req: Request, res: Response) => {
         last_transaction,
         address 
     } = req.body;
-    const addCustomer = await customerService.addCustomer({
+    const result = await customerService.addCustomer({
         customer_name,
         number_of_transaction,
         phone_number,
@@ -25,5 +25,5 @@ export const addCustomerHandler = async (req: Request, res: Response) => {
         last_transaction,
         address,
     });
-    res.status(201).json(addCustomer);
+    res.status(201).json(result);
 };
