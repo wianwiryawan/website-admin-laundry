@@ -8,7 +8,7 @@ export const transactionsInDataRelations = relations(transactionsInData, ({one})
 	}),
 	laundryServicesInDatum: one(laundryServicesInData, {
 		fields: [transactionsInData.serviceId],
-		references: [laundryServicesInData.servicesId]
+		references: [laundryServicesInData.laundryServicesId]
 	}),
 	perfumesInDatum: one(perfumesInData, {
 		fields: [transactionsInData.perfumeId],

@@ -5,7 +5,7 @@ export const data = pgSchema("data");
 
 
 export const laundryServicesInData = data.table("laundry_services", {
-	servicesId: serial("services_id").primaryKey().notNull(),
+	laundryServicesId: serial("laundry_services_id").primaryKey().notNull(),
 	serviceName: varchar("service_name", { length: 100 }).notNull(),
 	price: numeric(),
 	status: smallint(),
@@ -51,7 +51,7 @@ export const transactionsInData = data.table("transactions", {
 		}),
 	foreignKey({
 			columns: [table.serviceId],
-			foreignColumns: [laundryServicesInData.servicesId],
+			foreignColumns: [laundryServicesInData.laundryServicesId],
 			name: "transactions_service_id_services_services_id_fk"
 		}),
 	foreignKey({

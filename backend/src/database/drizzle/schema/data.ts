@@ -17,7 +17,7 @@ export const perfumes = mySchema.table(`perfumes`, {
     status: smallint("status"),
 });
 
-export const services = mySchema.table(`laundry_services`, {
+export const laundryServices = mySchema.table(`laundry_services`, {
     services_id: serial("laundry_services_id").primaryKey(),
     service_name: varchar("service_name", { length: 100 }).notNull(),
     price: numeric("price"),
@@ -38,7 +38,7 @@ export const transactions = mySchema.table(`transactions`, {
     transactions_id: serial("transactions_id").primaryKey(),
     transaction_date: date("transaction_date"),
     customer_id: integer("customer_id").references(() => customers.customers_id),
-    service_id: integer("service_id").references(() => services.services_id),
+    service_id: integer("service_id").references(() => laundryServices.services_id),
     perfume_id: integer("perfume_id").references(() => perfumes.perfums_id),
     total_price: numeric("total_price"),
 });
