@@ -1,16 +1,16 @@
 import { db } from "../../database/drizzle/db";
-import { perfumes } from "./perfumes.model";
+import { perfumesInData } from '../../database/drizzle/migrations/schema';
 import { createPerfumesValidation } from "./perfumes.validation";
 
 // Services: Handle business logic and talk to the database.
 
 export const getAllPerfumes = async () => {
-    return db.select().from(perfumes);
+    return db.select().from(perfumesInData);
 };
 
 export const addPerfume = async (
     perfumeData: {
-        perfume_name: string;
+        perfumeName: string;
         price?: string;
         description?: string;
         status?: number;
@@ -21,5 +21,5 @@ export const addPerfume = async (
             throw new Error(`Validation failed: ${result.error}`);
         }
         // Use validated data
-        return db.insert(perfumes).values(perfumeData);
+        return db.insert(perfumesInData).values(perfumeData);
     }

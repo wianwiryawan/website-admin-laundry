@@ -1,11 +1,11 @@
 import { db } from '../../database/drizzle/db';
-import { users } from './users.model';
+import { usersInData } from '../../database/drizzle/migrations/schema';
 import { createUserValidation } from './users.validation';
 
 // Services: Handle business logic and talk to the database.
 
 export const getAllUsers = async () => {
-    return db.select().from(users);
+    return db.select().from(usersInData);
 }
 
 export const addUser = async (
@@ -20,5 +20,5 @@ export const addUser = async (
         throw new Error(`Validation failed: ${result.error}`);
     }
     // Use validated data
-    return db.insert(users).values(userData);
+    return db.insert(usersInData).values(userData);
 }

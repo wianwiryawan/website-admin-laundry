@@ -10,13 +10,13 @@ export const getAllPerfumesHandler = async (req: Request, res: Response) => {
 
 export const addPerfumeHandler = async (req: Request, res: Response) => {
     const {
-        perfume_name,
+        perfumeName,
         price,
         description,
         status,
     } = req.body;
     const result = await perfumeService.addPerfume({
-        perfume_name,
+        perfumeName,
         price,
         description,
         status,
