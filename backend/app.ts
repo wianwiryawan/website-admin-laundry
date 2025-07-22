@@ -23,13 +23,13 @@ app.get('/api', (req: Request, res: Response) => {
 });
 
 // Mount the users routes
-app.use('/user-management/users', userRoutes);
+app.use('/users-management/users', userRoutes);
 
 // Mount the customer routes
-app.use('/customer-management/customers', customerRoutes);
+app.use('/customers-management/customers', customerRoutes);
 
 // Mount the laundry routes
-app.use('/laundry-service-management/laundry-service', laundryRoutes);
+app.use('/laundrys-service-management/laundry-service', laundryRoutes);
 
 // Mount the perfume routes
 app.use('/perfumes-management/perfumes', perfumesRoutes);
