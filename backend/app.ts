@@ -35,15 +35,8 @@ app.use('/laundry-service-management/laundry-service', laundryRoutes);
 // Mount the perfume routes
 app.use('/perfumes-management/perfumes', perfumesRoutes);
 
-app.get('/transactions-management/transactions', async (req: Request, res: Response) => {
-  const allTransactions = await db.select().from(transactions);
-  res.json(allTransactions);
-});
-
-app.get('/transactions-management/transactions/:id', async (req: Request, res: Response) => {
-  const allTransactions = await db.select().from(transactions);
-  res.json(allTransactions);
-});
+// Mount the transaction routes
+app.use('/transactions-management/transactions', perfumesRoutes);
 
 const PORT = process.env.NODE_PORT || 3002;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
