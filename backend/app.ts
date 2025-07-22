@@ -1,11 +1,10 @@
 import express, { Request, Response, Application } from 'express';
 import cors from 'cors';
-import { db } from './src/database/drizzle/db';
-import { perfumes, transactions } from './src/database/drizzle/schema/data';
 import userRoutes from './src/feature/users/users.route';
 import customerRoutes from './src/feature/customers/customers.route';
 import laundryRoutes from './src/feature/laundry-services/laundry-services.route';
 import perfumesRoutes from './src/feature/perfumes/perfumes.route';
+import transactionRoutes from './src/feature/transactions/transactions.route';
 
 const app: Application = express();
 
@@ -36,7 +35,7 @@ app.use('/laundry-service-management/laundry-service', laundryRoutes);
 app.use('/perfumes-management/perfumes', perfumesRoutes);
 
 // Mount the transaction routes
-app.use('/transactions-management/transactions', perfumesRoutes);
+app.use('/transactions-management/transactions', transactionRoutes);
 
 const PORT = process.env.NODE_PORT || 3002;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
