@@ -1,9 +1,9 @@
 import express, { Request, Response, Application } from 'express';
 import cors from 'cors';
 import { db } from './src/database/drizzle/db';
-import { customers, perfumes, transactions } from './src/database/drizzle/schema/data';
-import userRoutes from './src/feature/users/users.routes';
-import customerRoutes from './src/feature/customers/customers.routes';
+import { perfumes, transactions } from './src/database/drizzle/schema/data';
+import userRoutes from './src/feature/users/users.route';
+import customerRoutes from './src/feature/customers/customers.route';
 
 const app: Application = express();
 

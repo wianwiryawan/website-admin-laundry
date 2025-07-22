@@ -10,19 +10,19 @@ export const getAllCustomersHandler = async (req: Request, res: Response) => {
 
 export const addCustomerHandler = async (req: Request, res: Response) => {
     const {
-        customer_name,
-        number_of_transaction,
-        phone_number,
-        wa_available,
-        last_transaction,
+        customerName,
+        numberOfTransaction,
+        phoneNumber,
+        waAvailable,
+        lastTransaction,
         address 
     } = req.body;
     const result = await customerService.addCustomer({
-        customer_name,
-        number_of_transaction,
-        phone_number,
-        wa_available,
-        last_transaction,
+        customerName,
+        numberOfTransaction,
+        phoneNumber,
+        waAvailable,
+        lastTransaction,
         address,
     });
     res.status(201).json(result);

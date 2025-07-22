@@ -1,19 +1,19 @@
 import { db } from '../../database/drizzle/db';
-import { customers } from './customers.model';
+import { customersInData } from '../../database/drizzle/migrations/schema';
 import { createCustomerValidation } from './customers.validation';
 // Services: Handle business logic and talk to the database.
 
 export const getAllCustomers = async () => {
-    return db.select().from(customers);
+    return db.select().from(customersInData);
 };
 
 export const addCustomer = async (
     customerData: {
-        customer_name: string;
-        number_of_transaction: number;
-        phone_number: string;
-        wa_available: boolean;
-        last_transaction: string;
+        customerName: string;
+        numberOfTransaction: number;
+        phoneNumber: string;
+        waAvailable: boolean;
+        lastTransaction: string;
         address: string;
     }) => {
     const result = createCustomerValidation.safeParse(customerData);
@@ -22,5 +22,5 @@ export const addCustomer = async (
         throw new Error(`Validation failed: ${result.error}`);
     };
     // Use validated data
-    return db.insert(customers).values(customerData);
+    return db.insert(customersInData).values(customerData);
 };
