@@ -4,6 +4,7 @@ import { db } from './src/database/drizzle/db';
 import { perfumes, transactions } from './src/database/drizzle/schema/data';
 import userRoutes from './src/feature/users/users.route';
 import customerRoutes from './src/feature/customers/customers.route';
+import laundryRoutes from './src/feature/laundry-services/laundry-services.route';
 
 const app: Application = express();
 
@@ -26,6 +27,9 @@ app.use('/user-management/users', userRoutes);
 
 // Mount the customer routes
 app.use('/customer-management/customers', customerRoutes);
+
+// Mount the laundry routes
+app.use('/laundry-service-management/laundry-service', laundryRoutes);
 
 app.get('/perfumes-management/perfumes', async (req: Request, res: Response) => {
   const allPerfumes = await db.select().from(perfumes);

@@ -10,12 +10,12 @@ export const getAllLaundryServicesHandler = async (req: Request, res: Response) 
 
 export const addLaundryServiceHandler = async (req: Request, res: Response) => {
     const {
-        service_name,
+        serviceName,
         price,
         status,
     } = req.body;
     const result = await laundryServicesService.addLaundryService({
-        service_name,
+        serviceName,
         price,
         status,
     });

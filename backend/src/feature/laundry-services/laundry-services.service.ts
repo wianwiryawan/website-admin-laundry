@@ -1,16 +1,16 @@
 import { db } from "../../database/drizzle/db";
-import { laundryServices } from './laundry-services.model';
+import { laundryServicesInData } from '../../database/drizzle/migrations/schema';
 import { createLaundryServicesValidation } from './laundry-services.validation';
 
 // Services: Handle business logic and talk to the database.
 
 export const getAllLaundryServices = async () => {
-    return db.select().from(laundryServices);
+    return db.select().from(laundryServicesInData);
 };
 
 export const addLaundryService = async (
     laundryServicesData: {
-        service_name: string;
+        serviceName: string;
         price?: string;
         status?: number;
     }) => {
@@ -20,5 +20,5 @@ export const addLaundryService = async (
         throw new Error(`Validation failed: ${result.error}`);
     }
     // Use validated data
-    return db.insert(laundryServices).values(laundryServicesData);
+    return db.insert(laundryServicesInData).values(laundryServicesData);
 };
