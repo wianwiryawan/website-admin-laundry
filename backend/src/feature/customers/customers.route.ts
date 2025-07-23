@@ -7,6 +7,12 @@ const router = Router();
 router.get('/', customerController.getAllCustomersHandler);
 
 // Add new user
-router.post('/add', customerController.addCustomerHandler);
+router.post('/add', async (req, res, next) => {
+  try {
+	await customerController.addCustomerHandler(req, res);
+  } catch (err) {
+	next(err);
+  }
+});
 
 export default router;
