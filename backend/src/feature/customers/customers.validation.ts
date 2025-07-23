@@ -4,9 +4,9 @@ import { customersInData } from '../../database/drizzle/migrations/schema';
 
 // Validation: Handle validation logic.
 
-const baseCustomerSchema = createInsertSchema(customersInData);
+const insertCustomerSchema = createInsertSchema(customersInData);
 
-export const createCustomerValidation = baseCustomerSchema.extend({
+export const createCustomerValidation = insertCustomerSchema.extend({
   customerName: z.string().min(1).max(100),
   phoneNumber: z.string().min(1).max(25),
   lastTransaction: z.preprocess(
