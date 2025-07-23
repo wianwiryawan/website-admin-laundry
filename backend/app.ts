@@ -29,7 +29,7 @@ app.use('/users-management/users', userRoutes);
 app.use('/customers-management/customers', customerRoutes);
 
 // Mount the laundry routes
-app.use('/laundrys-service-management/laundry-service', laundryRoutes);
+app.use('/laundry-services-management/laundry-services', laundryRoutes);
 
 // Mount the perfume routes
 app.use('/perfumes-management/perfumes', perfumesRoutes);
