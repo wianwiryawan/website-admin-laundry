@@ -1,10 +1,10 @@
 import express, { Request, Response, Application } from 'express';
 import cors from 'cors';
-import userRoutes from './src/feature/users/users.route';
-import customerRoutes from './src/feature/customers/customers.route';
-import laundryRoutes from './src/feature/laundry-services/laundry-services.route';
-import perfumesRoutes from './src/feature/perfumes/perfumes.route';
-import transactionRoutes from './src/feature/transactions/transactions.route';
+import userRoutes from './src/api/users/users.route';
+import customerRoutes from './src/api/customers/customers.route';
+import laundryRoutes from './src/api/laundry-services/laundry-services.route';
+import perfumesRoutes from './src/api/perfumes/perfumes.route';
+import transactionRoutes from './src/api/transactions/transactions.route';
 
 const app: Application = express();
 
