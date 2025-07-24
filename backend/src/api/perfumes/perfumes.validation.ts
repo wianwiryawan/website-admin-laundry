@@ -7,6 +7,6 @@ import { perfumesInData } from '../../database/drizzle/migrations/schema';
 const insertPerfumeSchema = createInsertSchema(perfumesInData);
 
 export const createPerfumeValidation = insertPerfumeSchema.extend({
-    perfume_name: z.string().min(1).max(50),
+    perfumeName: z.string().min(1).max(50),
     description: z.string().min(1).max(100),
 });

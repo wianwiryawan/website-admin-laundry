@@ -14,6 +14,6 @@ import { laundryServicesInData } from '../../database/drizzle/migrations/schema'
 const insertLaundryServiceSchema = createInsertSchema(laundryServicesInData);
 
 export const createLaundryServiceValidation = insertLaundryServiceSchema.extend({
-    service_name: z.string().min(1).max(100)
+    serviceName: z.string().min(1).max(100)
 });
 

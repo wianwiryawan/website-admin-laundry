@@ -4,6 +4,23 @@ import { ZodError } from "zod";
 
 // Controllers: Handle HTTP request/response only.
 
+function responseClientError(err: unknown) {
+    if(err instanceof Error){
+        console.error('[ERROR]', err.message, err.stack);
+
+        // Return safe message to client
+        return {
+            status: 500,
+            message: 'Internal Server Error',
+        };
+    }
+    // Return safe message to client
+    return {
+        status: 500,
+        message: 'Unexpected Error',
+    };
+};
+
 export const getAllPerfumesHandler = async (req: Request, res: Response) => {
     const result = await perfumeService.getAllPerfumes();
     res.json(result);
@@ -22,6 +39,6 @@ export const addPerfumeHandler = async (req: Request, res: Response) => {
             });
         }
         // any other error
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).json({ error: 'Internal Server Error' + error});
     }
 };
