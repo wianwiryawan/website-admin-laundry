@@ -1,8 +1,12 @@
 import { z } from 'zod';
+import { createInsertSchema } from 'drizzle-zod';
+import { perfumesInData } from '../../database/drizzle/migrations/schema';
 
-export const createPerfumesValidation = z.object({
+// Validation: Handle validation logic.
+
+const insertPerfumeSchema = createInsertSchema(perfumesInData);
+
+export const createPerfumeValidation = insertPerfumeSchema.extend({
     perfume_name: z.string().min(1).max(50),
-    price: z.number(),
     description: z.string().min(1).max(100),
-    status: z.int(),
 });

@@ -7,6 +7,12 @@ const router = Router();
 router.get('/', transactionController.getAllTransactionsHandler);
 
 // Add new transaction record
-router.post('/add', transactionController.addTransactionHandler);
+router.post('/add', async (req, res, next) => {
+    try {
+        await transactionController.addTransactionHandler(req, res);
+    } catch (error) {
+        next(error);
+    }
+});
 
 export default router;

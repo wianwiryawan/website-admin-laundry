@@ -1,7 +1,11 @@
 import { z } from 'zod';
+import { createInsertSchema } from 'drizzle-zod';
+import { usersInData } from '../../database/drizzle/migrations/schema';
 
-export const createUserValidation = z.object({
-  username: z.string().min(1),
-  email: z.email(),
-  status: z.number().optional(),
+// Validation: Handle validation logic.
+
+const insertUserSchema = createInsertSchema(usersInData);
+
+export const createUserValidation = insertUserSchema.extend({
+  username: z.string().min(1).max(100),
 });

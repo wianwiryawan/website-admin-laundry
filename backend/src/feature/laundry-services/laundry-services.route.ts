@@ -1,12 +1,18 @@
 import { Router } from "express";
-import * as laundryServicesController from './laundry-services.controller';
+import * as laundryServiceController from './laundry-services.controller';
 
 const router = Router();
 
 // List all laundry service
-router.get('/', laundryServicesController.getAllLaundryServicesHandler);
+router.get('/', laundryServiceController.getAllLaundryServicesHandler);
 
 // Add new laundry service
-router.post('/add', laundryServicesController.addLaundryServiceHandler);
+router.post('/add', async (req, res, next) => {
+    try {
+        await laundryServiceController.addLaundryServiceHandler(req, res);
+    } catch (error) {
+        next(error);
+    }
+});
 
 export default router;

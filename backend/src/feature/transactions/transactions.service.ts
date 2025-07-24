@@ -8,19 +8,20 @@ export const getAllTransaction = async () => {
     return db.select().from(transactionsInData);
 };
 
-export const addTransaction = async (
-    transactionsData: {
-        transactionDate?: string;
-        customerId?: number;
-        serviceId?: number;
-        perfumeId?: number;
-        totalPrice?: string;
-    }) => {
+export const addTransaction = async (transactionsData: unknown) => {
     const result = createTransactionValidation.safeParse(transactionsData);
     if(!result.success){
         // Handle validation error (throw, return, or log)
         throw new Error(`Validation failed: ${result.error}`);
     }
+
+    const validatedData = {
+        ...result.data,
+        transactionDate: result.data.transactionDate instanceof Date
+        ? result.data.transactionDate.toISOString()
+        : result.data.transactionDate
+    };
+    
     // Use validated data
-    return db.insert(transactionsInData).values(transactionsData);
+    return db.insert(transactionsInData).values(validatedData);
 };

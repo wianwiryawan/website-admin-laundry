@@ -8,17 +8,15 @@ export const getAllUsers = async () => {
     return db.select().from(usersInData);
 }
 
-export const addUser = async (
-    userData: { 
-        username: string; 
-        email: string; 
-        status?: number; 
-    }) => {
+export const addUser = async (userData: unknown) => {
     const result = createUserValidation.safeParse(userData);
     if (!result.success){
         // Handle validation error (throw, return, or log)
         throw new Error(`Validation failed: ${result.error}`);
     }
+
+    const validatedData = result.data;
+
     // Use validated data
-    return db.insert(usersInData).values(userData);
+    return db.insert(usersInData).values(validatedData);
 }

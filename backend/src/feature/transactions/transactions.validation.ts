@@ -1,9 +1,16 @@
 import { z } from "zod";
+import { createInsertSchema } from "drizzle-zod";
+import { transactionsInData } from "../../database/drizzle/migrations/schema";
 
-export const createTransactionValidation = z.object({
-    transactionDate: z.date(),
-    customerId: z.int(),
-    serviceId: z.int(),
-    perfumeId: z.int(),
-    totalPrice: z.number(),
+// Validation: Handle validation logic.
+
+const insertTransactionSchema = createInsertSchema(transactionsInData);
+
+export const createTransactionValidation = insertTransactionSchema.extend({
+    transactionDate: z.preprocess(
+    (val) => {
+      if (typeof val === "string" || val instanceof Date) return new Date(val);
+    },
+        z.date(),
+    ),
 });

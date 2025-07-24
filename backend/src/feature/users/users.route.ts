@@ -1,13 +1,19 @@
 import { Router } from "express";
-import * as userController from './users.controller';
+import * as usersController from './users.controller';
 
 const router = Router();
 
 // List all users
-router.get('/', userController.getAllUsersHandler);
+router.get('/', usersController.getAllUsersHandler);
 
 // Add new user
-router.post('/add', userController.addUserHandler);
+router.post('/add', async (req, res, next) => {
+    try {
+        await usersController.addUserHandler(req, res);
+    } catch (error) {
+        next(error);
+    }
+});
 
 // You can add more routes here as needed:
 // router.get('/:id', UserController.getUserById);

@@ -7,6 +7,12 @@ const router = Router();
 router.get('/', perfumeController.getAllPerfumesHandler);
 
 // Add new perfume
-router.post('/add', perfumeController.addPerfumeHandler);
+router.post('/add', async (req, res, next) => {
+    try {
+        await perfumeController.getAllPerfumesHandler(req, res);
+    } catch (error) {
+        next(error);
+    }
+});
 
 export default router;
