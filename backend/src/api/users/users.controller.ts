@@ -9,6 +9,29 @@ export const getAllUsersHandler = async (req: Request, res: Response) => {
     res.json(result);
 };
 
+export const getUserById = async (req: Request, res: Response) => {
+    try {
+        const id = Number(req.params.id);
+        const result = await usersService.getUserById(id);
+        if(result.length == 0){
+            return res.status(404).json({
+                message: 'Data not found',
+            });
+        }
+        res.json(result);
+    } catch (error) {
+        if (error instanceof ZodError) {
+            // validation failed
+            return res.status(400).json({
+                error: 'Validation Error',
+                details: error,
+            });
+        }
+        // any other error
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+
 export const addUserHandler = async (req: Request, res: Response) => {
     try {
         const result = await usersService.addUser(req.body);
