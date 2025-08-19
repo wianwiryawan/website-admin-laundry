@@ -19,7 +19,8 @@ export const addUser = async (userData: unknown) => {
     const result = createUserValidation.safeParse(userData);
     if (!result.success){
         // Handle validation error (throw, return, or log)
-        throw new Error(`Validation failed: ${result.error}`);
+        // throw new Error(`Validation failed: ${result.error}`);
+        throw result.error;
     }
 
     const validatedData = result.data;

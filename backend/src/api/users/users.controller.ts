@@ -22,12 +22,14 @@ export const getUserById = async (req: Request, res: Response) => {
     } catch (error) {
         if (error instanceof ZodError) {
             // validation failed
+            console.error(error);
             return res.status(400).json({
                 error: 'Validation Error',
                 details: error,
             });
         }
         // any other error
+        console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 }
@@ -37,14 +39,15 @@ export const addUserHandler = async (req: Request, res: Response) => {
         const result = await usersService.addUser(req.body);
         res.status(201).json(result);
     } catch (error) {
+        // validation failed
         if (error instanceof ZodError) {
-            // validation failed
             return res.status(400).json({
                 error: 'Validation Error',
                 details: error,
             });
         }
         // any other error
+        console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };

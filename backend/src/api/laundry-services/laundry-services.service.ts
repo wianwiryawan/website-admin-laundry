@@ -12,7 +12,8 @@ export const addLaundryService = async (laundryServicesData: unknown) => {
     const result = createLaundryServiceValidation.safeParse(laundryServicesData);
     if(!result.success){
         // Handle validation error (throw, return, or log)
-        throw new Error(`Validation failed: ${result.error}`);
+        // throw new Error(`Validation failed: ${result.error}`);
+        throw result.error;
     }
 
     // Destructure and pass the validated data to Drizzle insert

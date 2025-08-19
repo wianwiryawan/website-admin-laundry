@@ -12,7 +12,8 @@ export const addCustomer = async (customerData: unknown) => {
     const result = createCustomerValidation.safeParse(customerData);
     if(!result.success){
         // Handle validation error (throw, return, or log)
-        throw new Error(`Validation failed: ${result.error}`);
+        // throw new Error(`Validation failed: ${result.error}`);
+        throw result.error;
     };
 
     // Destructure and pass the validated data to Drizzle insert
