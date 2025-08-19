@@ -15,4 +15,12 @@ router.post('/add', async (req, res, next) => {
     }
 });
 
+router.get('/:id', async (req, res, next) => {
+    try {
+        await transactionController.getTransactionById(req, res);
+    } catch (error) {
+        next(error);
+    }
+})
+
 export default router;
