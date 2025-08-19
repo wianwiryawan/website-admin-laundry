@@ -1,3 +1,4 @@
+import { eq } from "drizzle-orm";
 import { db } from "../../database/drizzle/db";
 import { laundryServicesInData } from '../../database/drizzle/migrations/schema';
 import { createLaundryServiceValidation } from './laundry-services.validation';
@@ -6,6 +7,12 @@ import { createLaundryServiceValidation } from './laundry-services.validation';
 
 export const getAllLaundryServices = async () => {
     return db.select().from(laundryServicesInData);
+};
+
+export const getLaundryById = async (serviceId: number) => {
+    return db.select().from(laundryServicesInData).where(
+        eq(laundryServicesInData.laundryServicesId, serviceId)
+    );
 };
 
 export const addLaundryService = async (laundryServicesData: unknown) => {

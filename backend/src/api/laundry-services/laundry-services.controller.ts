@@ -9,6 +9,22 @@ export const getAllLaundryServicesHandler = async (req: Request, res: Response) 
     res.json(result);
 };
 
+export const getLaundryById = async (req: Request, res: Response) => {
+    try {
+        const id = Number(req.params.id);
+        const result = await laundryServicesService.getLaundryById(id);
+        if (result.length == 0) {
+            return res.status(404).json({
+                message: 'Data not found',
+            });
+        }
+        res.json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
 export const addLaundryServiceHandler = async (req: Request, res: Response) => {
     try {
         const result = await laundryServicesService.addLaundryService(req.body);

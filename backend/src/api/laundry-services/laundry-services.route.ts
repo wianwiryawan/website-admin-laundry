@@ -15,4 +15,13 @@ router.post('/add', async (req, res, next) => {
     }
 });
 
+// Get new laundry service by id
+router.get('/:id', async (req, res, next) => {
+    try {
+        await laundryServiceController.getLaundryById(req, res);
+    } catch (error) {
+        next(error);
+    }
+});
+
 export default router;
