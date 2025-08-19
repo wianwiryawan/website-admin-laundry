@@ -15,4 +15,13 @@ router.post('/add', async (req, res, next) => {
     }
 });
 
+// Get perfume by id
+router.get('/:id', async (req, res, next) => {
+    try {
+        await perfumeController.getPerfumeById(req, res);
+    } catch (error) {
+        next(error);
+    }
+});
+
 export default router;

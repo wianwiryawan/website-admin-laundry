@@ -9,6 +9,22 @@ export const getAllPerfumesHandler = async (req: Request, res: Response) => {
     res.json(result);
 };
 
+export const getPerfumeById = async (req: Request, res: Response) => {
+    try {
+        const id = Number(req.params.id);
+        const result = await perfumeService.getPerfumeById(id);
+        if (result.length == 0) {
+            return res.status(404).json({
+                message: 'Data not found',
+            });
+        }
+        res.json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+
 export const addPerfumeHandler = async (req: Request, res: Response) => {
     try {
         const result = await perfumeService.addPerfume(req.body);
