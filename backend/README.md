@@ -19,4 +19,6 @@ Run `dotenvx encrypt` command on your terminal to encrypt your .env
 
 Make sure you have postgre installed, then run this code `dotenvx run -- npx drizzle-kit push --config=./src/database/drizzle/drizzle.config.ts` to add new schema, table, and column into your new database
 
-Run the project with `dotenvx run -- node app.js`
+For dev, run the project with dotenvx run -- npx nodemon --watch . --ext ts,js --exec tsx app.ts
+
+For prod, run the project with `dotenvx run -- node app.js`
