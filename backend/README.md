@@ -22,3 +22,7 @@ Make sure you have postgre installed, then run this code `dotenvx run -- npx dri
 For dev, run the project with dotenvx run -- npx nodemon --watch . --ext ts,js --exec tsx app.ts
 
 For prod, run the project with `dotenvx run -- node app.js`
+
+Known issue:
+
+1. If something is added to routes file, restart node
