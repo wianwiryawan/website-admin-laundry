@@ -1,6 +1,6 @@
 import { db } from '../../database/drizzle/db';
 import { usersInData } from '../../database/drizzle/migrations/schema';
-import { createUserValidation } from './users.validation';
+import { createUserValidation, updateUserValidation } from './users.validation';
 import { eq } from 'drizzle-orm';
 
 // Services: Handle business logic and talk to the database.
@@ -27,4 +27,20 @@ export const addUser = async (userData: unknown) => {
 
     // Use validated data
     return db.insert(usersInData).values(validatedData);
+}
+
+export const updateUserById = async (userId: number, userData: unknown) => {
+    const result = updateUserValidation.safeParse(userData);
+    if (!result.success) {
+        throw result.error;
+    };
+
+    const validatedData = result.data;
+
+    return db.update(usersInData)
+        .set(validatedData)
+        .where(
+            eq(usersInData.usersId, userId)
+        )
+        .returning();
 }

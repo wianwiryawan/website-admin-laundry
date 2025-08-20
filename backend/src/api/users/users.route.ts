@@ -15,7 +15,7 @@ router.post('/add', async (req, res, next) => {
     }
 });
 
-// Select selected user
+// Get user by id
 router.get('/:id', async (req, res, next) => {
     try {
         await usersController.getUserById(req, res);
@@ -23,6 +23,15 @@ router.get('/:id', async (req, res, next) => {
         next(error);
     }
 });
+
+// Edit user by id
+router.put('/edit/:id', async (req, res, next) => {
+    try {
+        await usersController.editUserById(req, res);
+    } catch (error) {
+        next(error);
+    }
+})
 
 // You can add more routes here as needed:
 // router.get('/:id', UserController.getUserById);

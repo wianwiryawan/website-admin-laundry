@@ -39,8 +39,8 @@ export const addUserHandler = async (req: Request, res: Response) => {
         const result = await usersService.addUser(req.body);
         res.status(201).json(result);
     } catch (error) {
-        // validation failed
         if (error instanceof ZodError) {
+            // validation failed
             return res.status(400).json({
                 error: 'Validation Error',
                 details: error,
@@ -51,3 +51,22 @@ export const addUserHandler = async (req: Request, res: Response) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
+
+export const editUserById = async (req: Request, res: Response) => {
+    try {
+        const id = Number(req.params.id);
+        const updateData = req.body;
+        const result = await usersService.updateUserById(id, updateData);
+        res.json(result);
+    } catch (error) {
+        if (error instanceof ZodError) {
+            // validation failed
+            return res.status(400).json({
+                error: 'Validation Error',
+                details: error,
+            });
+        }
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
