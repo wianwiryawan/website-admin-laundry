@@ -12,5 +12,7 @@ export const createUserValidation = insertUserSchema.extend({
 });
 
 export const updateUserValidation = updateUserSchema.extend({
-  username: z.string().min(1).max(100),
+  username: z.string().min(1).max(100).optional(),
+  status: z.int().min(0).max(1).optional(),
+  email: z.email().optional(),
 });
