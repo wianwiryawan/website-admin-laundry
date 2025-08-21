@@ -70,3 +70,15 @@ export const editUserById = async (req: Request, res: Response) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 }
+
+export const softDeleteUserById = async (req: Request, res: Response) => {
+    try {
+        const id = Number(req.params.id);
+        const updateData = req.body;
+        const result = await usersService.softDeleteUserById(id, updateData);
+        res.json(result);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}

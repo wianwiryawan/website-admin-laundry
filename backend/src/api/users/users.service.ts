@@ -44,3 +44,18 @@ export const updateUserById = async (userId: number, userData: unknown) => {
         )
         .returning();
 }
+
+export const softDeleteUserById = async (userId: number, status: unknown) => {
+    const result = updateUserValidation.safeParse(status);
+    if (!result.success) {
+        throw result.error;
+    }
+
+    const validatedData = result.data;
+
+    return db.update(usersInData)
+        .set(validatedData)
+        .where(
+            eq(usersInData.usersId, userId)
+        );
+}

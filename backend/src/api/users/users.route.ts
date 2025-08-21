@@ -33,9 +33,13 @@ router.put('/edit/:id', async (req, res, next) => {
     }
 })
 
-// You can add more routes here as needed:
-// router.get('/:id', UserController.getUserById);
-// router.put('/:id', UserController.updateUser);
-// router.delete('/:id', UserController.deleteUser);
+// Soft delete user by id
+router.put('/delete/:id', async (req, res, next) => {
+    try {
+        await usersController.softDeleteUserById(req, res);
+    } catch (error) {
+        next(error);
+    }
+});
 
 export default router;
