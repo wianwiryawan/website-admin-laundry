@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "../../database/drizzle/db";
 import { perfumesInData } from '../../database/drizzle/migrations/schema';
-import { createPerfumeValidation } from "./perfumes.validation";
+import { createPerfumeValidation, updatePerfumeValidation } from "./perfumes.validation";
 
 // Services: Handle business logic and talk to the database.
 
@@ -27,4 +27,34 @@ export const addPerfume = async (perfumeData: unknown) => {
 
     // Use validated data
     return db.insert(perfumesInData).values(validatedData);
+}
+
+export const updatePerfumeById = async (perfumeId: number, perfumeData: unknown) => {
+    const result = updatePerfumeValidation.safeParse(perfumeData);
+    if (!result.success) {
+        throw result.error;
+    }
+
+    const validatedData = result.data;
+
+    return db.update(perfumesInData)
+        .set(validatedData)
+        .where(
+            eq(perfumesInData.perfumesId, perfumeId)
+        );
+}
+
+export const softDeletePerfumeById = async (perfumeId: number, perfumeData: unknown) => {
+    const result = updatePerfumeValidation.safeParse(perfumeData);
+    if (!result.success) {
+        throw result.error;
+    }
+
+    let validatedData = result.data;
+
+    return db.update(perfumesInData)
+        .set(validatedData)
+        .where(
+            eq(perfumesInData.perfumesId, perfumeId)
+        ).returning();
 }

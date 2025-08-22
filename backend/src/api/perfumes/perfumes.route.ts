@@ -18,10 +18,28 @@ router.post('/add', async (req, res, next) => {
 // Get perfume by id
 router.get('/:id', async (req, res, next) => {
     try {
-        await perfumeController.getPerfumeById(req, res);
+        await perfumeController.getPerfumeByIdHandler(req, res);
     } catch (error) {
         next(error);
     }
 });
+
+// Edit perfume by id
+router.put('/edit/:id', async (req, res, next) => {
+    try {
+        await perfumeController.updatePerfumeByIdHandler(req, res);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// Soft delete perfume by id
+router.put('/delete/:id', async (req, res, next) => {
+    try {
+        await perfumeController.softDeletePerfumeByIdHandler(req, res);
+    } catch (error) {
+        next(error);
+    }
+})
 
 export default router;
