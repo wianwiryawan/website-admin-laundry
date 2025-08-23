@@ -25,3 +25,6 @@ export default defineConfig({
 
 // To pull
 // dotenvx run -- npx drizzle-kit pull --config=./src/database/drizzle/drizzle.config.ts
+
+// To push
+// dotenvx run -- npx drizzle-kit push --config=./src/database/drizzle/drizzle.config.ts
