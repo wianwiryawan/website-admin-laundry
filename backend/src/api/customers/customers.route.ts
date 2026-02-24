@@ -33,4 +33,13 @@ router.put('/edit/:id', async (req, res, next) => {
   }
 });
 
+// Delete user by id
+router.put('/delete/:id', async (req, res, next) => {
+  try {
+    await customerController.softDeleteCustomerByIdHandler(req, res);
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default router;

@@ -54,3 +54,23 @@ export const updateCustomerById = async (customerId: number, customerData: unkno
             eq(customersInData.customersId, customerId)
         );
 };
+
+export const softDeleteCustomerById = async (customerId: number, customerData: unknown) => {
+    const result = updateCustomerValidation.safeParse(customerData);
+    if (!result.success) {
+        throw result.error;
+    }
+
+    const validatedData = {
+        ...result.data,
+        lastTransaction: result.data.lastTransaction instanceof Date
+        ? result.data.lastTransaction.toISOString()
+        : result.data.lastTransaction
+    };
+
+    return db.update(customersInData)
+        .set(validatedData)
+        .where(
+            eq(customersInData.customersId, customerId)
+        );
+}

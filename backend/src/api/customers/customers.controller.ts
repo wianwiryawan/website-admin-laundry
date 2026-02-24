@@ -66,3 +66,26 @@ export const updateCustomerByIdHandler = async (req: Request, res: Response) => 
     }
 }
 
+export const softDeleteCustomerByIdHandler = async (req: Request, res: Response) => {
+    try {
+        const id = Number(req.params.id);
+        const result = await customerService.softDeleteCustomerById(id, req.body);
+        res.json(result);
+    } catch (error) {
+        handleError(res, error);
+    };
+};
+
+function handleError(res: Response, error: any) {
+    if (error instanceof ZodError) {
+            // validation failed
+            console.error(error);
+            return res.status(400).json({
+                error: 'Validation Error',
+                details: error,
+            });
+        };
+        // any other error
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error'});
+}
