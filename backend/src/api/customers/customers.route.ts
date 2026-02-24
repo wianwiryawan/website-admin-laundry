@@ -15,12 +15,21 @@ router.post('/add', async (req, res, next) => {
   }
 });
 
-// Get laundry service by id
+// Get user by id
 router.get('/:id', async (req, res, next) => {
   try {
     await customerController.getCustomerById(req, res);
   } catch (error) {
     next(error);
+  }
+});
+
+// Edit user by id
+router.put('/edit/:id', async (req, res, next) => {
+  try {
+    await customerController.updateCustomerByIdHandler(req, res);
+  } catch (error) {
+    next(error)
   }
 });
 

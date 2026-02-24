@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from '../../database/drizzle/db';
 import { customersInData } from '../../database/drizzle/migrations/schema';
-import { createCustomerValidation } from './customers.validation';
+import { createCustomerValidation, updateCustomerValidation } from './customers.validation';
 
 // Services: Handle business logic and talk to the database.
 
@@ -33,4 +33,24 @@ export const addCustomer = async (customerData: unknown) => {
 
     // Use validated data
     return db.insert(customersInData).values(validatedData);
+};
+
+export const updateCustomerById = async (customerId: number, customerData: unknown) => {
+    const result = createCustomerValidation.safeParse(customerData);
+    if (!result.success) {
+        throw result.error;
+    }
+
+    const validatedData = {
+        ...result.data,
+        lastTransaction: result.data.lastTransaction instanceof Date
+            ? result.data.lastTransaction.toISOString()
+            : result.data.lastTransaction
+    };
+
+    return db.update(customersInData)
+        .set(validatedData)
+        .where(
+            eq(customersInData.customersId, customerId)
+        );
 };
