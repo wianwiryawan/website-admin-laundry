@@ -7,7 +7,7 @@ import { transactionsInData } from "../../database/drizzle/migrations/schema";
 const insertTransactionSchema = createInsertSchema(transactionsInData);
 
 export const createTransactionValidation = insertTransactionSchema.extend({
-    transactionDate: z.preprocess(
+    transaction_date: z.preprocess(
     (val) => {
       if (typeof val === "string" || val instanceof Date) return new Date(val);
     },
