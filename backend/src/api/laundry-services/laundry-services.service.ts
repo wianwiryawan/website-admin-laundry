@@ -11,7 +11,7 @@ export const getAllLaundryServices = async () => {
 
 export const getLaundryById = async (serviceId: number) => {
     return db.select().from(laundryServicesInData).where(
-        eq(laundryServicesInData.laundryServicesId, serviceId)
+        eq(laundryServicesInData.laundry_services_id, serviceId)
     );
 };
 

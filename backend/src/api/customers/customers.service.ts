@@ -11,7 +11,7 @@ export const getAllCustomers = async () => {
 
 export const getCustomerById = async (customerId: number) => {
     return db.select().from(customersInData).where(
-        eq(customersInData.customersId, customerId)
+        eq(customersInData.customers_id, customerId)
     );
 };
 
@@ -26,9 +26,9 @@ export const addCustomer = async (customerData: unknown) => {
     // Destructure and pass the validated data to Drizzle insert
     const validatedData = {
         ...result.data,
-        lastTransaction: result.data.lastTransaction instanceof Date
-            ? result.data.lastTransaction.toISOString()
-            : result.data.lastTransaction
+        last_transaction: result.data.last_transaction instanceof Date
+            ? result.data.last_transaction.toISOString()
+            : result.data.last_transaction
     };
 
     // Use validated data
@@ -43,15 +43,15 @@ export const updateCustomerById = async (customerId: number, customerData: unkno
 
     const validatedData = {
         ...result.data,
-        lastTransaction: result.data.lastTransaction instanceof Date
-            ? result.data.lastTransaction.toISOString()
-            : result.data.lastTransaction
+        last_transaction: result.data.last_transaction instanceof Date
+            ? result.data.last_transaction.toISOString()
+            : result.data.last_transaction
     };
 
     return db.update(customersInData)
         .set(validatedData)
         .where(
-            eq(customersInData.customersId, customerId)
+            eq(customersInData.customers_id, customerId)
         );
 };
 
@@ -63,14 +63,14 @@ export const softDeleteCustomerById = async (customerId: number, customerData: u
 
     const validatedData = {
         ...result.data,
-        lastTransaction: result.data.lastTransaction instanceof Date
-        ? result.data.lastTransaction.toISOString()
-        : result.data.lastTransaction
+        last_transaction: result.data.last_transaction instanceof Date
+        ? result.data.last_transaction.toISOString()
+        : result.data.last_transaction
     };
 
     return db.update(customersInData)
         .set(validatedData)
         .where(
-            eq(customersInData.customersId, customerId)
+            eq(customersInData.customers_id, customerId)
         );
 }

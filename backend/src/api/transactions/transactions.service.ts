@@ -11,7 +11,7 @@ export const getAllTransaction = async () => {
 
 export const getTransactionById = async (transactionId: number) => {
     return db.select().from(transactionsInData).where(
-        eq(transactionsInData.transactionsId, transactionId)
+        eq(transactionsInData.transactions_id, transactionId)
     );
 };
 
@@ -25,9 +25,9 @@ export const addTransaction = async (transactionsData: unknown) => {
 
     const validatedData = {
         ...result.data,
-        transactionDate: result.data.transactionDate instanceof Date
-        ? result.data.transactionDate.toISOString()
-        : result.data.transactionDate
+        transaction_date: result.data.transaction_date instanceof Date
+        ? result.data.transaction_date.toISOString()
+        : result.data.transaction_date
     };
     
     // Use validated data

@@ -11,7 +11,7 @@ export const getAllUsers = async () => {
 
 export const getUserById = async (userId: number) => {
     return db.select().from(usersInData).where(
-        eq(usersInData.usersId, userId)
+        eq(usersInData.users_id, userId)
     );
 }
 
@@ -40,7 +40,7 @@ export const updateUserById = async (userId: number, userData: unknown) => {
     return db.update(usersInData)
         .set(validatedData)
         .where(
-            eq(usersInData.usersId, userId)
+            eq(usersInData.users_id, userId)
         )
         .returning();
 }
@@ -56,6 +56,6 @@ export const softDeleteUserById = async (userId: number, status: unknown) => {
     return db.update(usersInData)
         .set(validatedData)
         .where(
-            eq(usersInData.usersId, userId)
+            eq(usersInData.users_id, userId)
         );
 }

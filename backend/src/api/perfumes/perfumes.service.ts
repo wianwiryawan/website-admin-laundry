@@ -11,7 +11,7 @@ export const getAllPerfumes = async () => {
 
 export const getPerfumeById = async (perfumeId: number) => {
     return db.select().from(perfumesInData).where(
-        eq(perfumesInData.perfumesId, perfumeId)
+        eq(perfumesInData.perfumes_id, perfumeId)
     );
 };
 
@@ -40,7 +40,7 @@ export const updatePerfumeById = async (perfumeId: number, perfumeData: unknown)
     return db.update(perfumesInData)
         .set(validatedData)
         .where(
-            eq(perfumesInData.perfumesId, perfumeId)
+            eq(perfumesInData.perfumes_id, perfumeId)
         );
 }
 
@@ -55,6 +55,6 @@ export const softDeletePerfumeById = async (perfumeId: number, perfumeData: unkn
     return db.update(perfumesInData)
         .set(validatedData)
         .where(
-            eq(perfumesInData.perfumesId, perfumeId)
+            eq(perfumesInData.perfumes_id, perfumeId)
         ).returning();
 }
