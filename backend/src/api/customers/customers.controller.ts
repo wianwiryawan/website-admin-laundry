@@ -20,8 +20,7 @@ export const getCustomerById = async (req: Request, res: Response) => {
         };
         res.json(result);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        handleError(res, error);
     }
 };
 
@@ -31,17 +30,7 @@ export const addCustomerHandler = async (req: Request, res: Response) => {
         const result = await customerService.addCustomer(req.body);
         res.status(201).json(result);
     } catch (error) {
-        if (error instanceof ZodError) {
-            // validation failed
-            console.error(error);
-            return res.status(400).json({
-                error: 'Validation Error',
-                details: error,
-            });
-        }
-        // any other error
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        handleError(res, error);
     }
 };
 
@@ -52,17 +41,7 @@ export const updateCustomerByIdHandler = async (req: Request, res: Response) => 
         const result = await customerService.updateCustomerById(id, customerData);
         res.json(result);
     } catch (error) {
-        if (error instanceof ZodError) {
-            // validation failed
-            console.error(error);
-            return res.status(400).json({
-                error: 'Validation Error',
-                details: error,
-            });
-        }
-        // any other error
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        handleError(res, error);
     }
 }
 
