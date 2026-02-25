@@ -13,10 +13,6 @@ export default defineConfig({
     password: config.DB_PASSWORD,
     ssl: false,
   },
-  migrations: {
-    table: 'my-migrations-table', // `__drizzle_migrations` by default
-    schema: 'data', // used in PostgreSQL only, `drizzle` by default
-  },
   schemaFilter: ["data"],
 });
 
