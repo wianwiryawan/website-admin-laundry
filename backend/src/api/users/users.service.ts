@@ -35,7 +35,10 @@ export const updateUserById = async (userId: number, userData: unknown) => {
         throw result.error;
     };
 
-    const validatedData = result.data;
+    const validatedData = {
+        ...result.data,
+        updated_date: new Date().toISOString() // Add current timestamp for updated_date
+    };
 
     return db.update(usersInData)
         .set(validatedData)
@@ -51,7 +54,10 @@ export const softDeleteUserById = async (userId: number, status: unknown) => {
         throw result.error;
     }
 
-    const validatedData = result.data;
+    const validatedData = {
+        ...result.data,
+        updated_date: new Date().toISOString() // Add current timestamp for updated_date
+    };
 
     return db.update(usersInData)
         .set(validatedData)

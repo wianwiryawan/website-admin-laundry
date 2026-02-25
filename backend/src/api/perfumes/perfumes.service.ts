@@ -35,7 +35,10 @@ export const updatePerfumeById = async (perfumeId: number, perfumeData: unknown)
         throw result.error;
     }
 
-    const validatedData = result.data;
+    const validatedData = {
+        ...result.data,
+        updated_date: new Date().toISOString() // Add current timestamp for updated_date
+    };
 
     return db.update(perfumesInData)
         .set(validatedData)
@@ -50,7 +53,10 @@ export const softDeletePerfumeById = async (perfumeId: number, perfumeData: unkn
         throw result.error;
     }
 
-    let validatedData = result.data;
+    let validatedData = {
+        ...result.data,
+        updated_date: new Date().toISOString() // Add current timestamp for updated_date
+    };
 
     return db.update(perfumesInData)
         .set(validatedData)

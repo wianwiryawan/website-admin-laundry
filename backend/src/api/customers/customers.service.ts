@@ -45,7 +45,8 @@ export const updateCustomerById = async (customerId: number, customerData: unkno
         ...result.data,
         last_transaction: result.data.last_transaction instanceof Date
             ? result.data.last_transaction.toISOString()
-            : result.data.last_transaction
+            : result.data.last_transaction,
+        updated_date: new Date().toISOString(),
     };
 
     return db.update(customersInData)
@@ -65,7 +66,8 @@ export const softDeleteCustomerById = async (customerId: number, customerData: u
         ...result.data,
         last_transaction: result.data.last_transaction instanceof Date
         ? result.data.last_transaction.toISOString()
-        : result.data.last_transaction
+        : result.data.last_transaction,
+        updated_date: new Date().toISOString(),
     };
 
     return db.update(customersInData)
