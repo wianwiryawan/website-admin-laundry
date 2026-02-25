@@ -17,7 +17,7 @@ NODE_PORT=int // Port where you node listen to
 
 Run `dotenvx encrypt` command on your terminal to encrypt your .env
 
-Make sure you have postgre installed, then run this code `dotenvx run -- npx drizzle-kit push --config=./src/database/drizzle/drizzle.config.ts` to add new schema, table, and column into your new database
+Make sure you have postgre installed, then run this code `dotenvx run -- npx drizzle-kit migrate --config=./src/database/drizzle/drizzle.config.ts` to add new schema, table, and column into your new database
 
 For dev, run the project with `dotenvx run -- npx nodemon --watch . --ext ts,js --exec tsx app.ts`
 
