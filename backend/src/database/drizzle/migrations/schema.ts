@@ -1,80 +1,80 @@
-import { pgTable, pgSchema, integer, varchar, smallint, date, foreignKey, serial, numeric, boolean } from "drizzle-orm/pg-core"
+import { pgSchema, foreignKey, serial, boolean, smallint, varchar, numeric,integer, date } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm"
 
-export const data = pgSchema("data");
+export const mySchema = pgSchema("data");
 
-export const usersInData = data.table("users", {
-	usersId: integer("users_id").primaryKey().generatedAlwaysAsIdentity({ name: "data.users_id", startWith: 1, increment: 1, minValue: 1, maxValue: 2147483647, cache: 1 }),
+export const users = mySchema.table(`users`, {
+	users_id: integer().primaryKey().generatedAlwaysAsIdentity({ name: "users_id", startWith: 1, increment: 1, minValue: 1, maxValue: 2147483647, cache: 1 }),
 	username: varchar({ length: 100 }).notNull(),
 	status: smallint(),
 	email: varchar({ length: 100 }).notNull(),
-	createdDate: date("created_date"),
-	updatedDate: date("updated_date"),
-	createdBy: integer("created_by"),
-	updatedBy: integer("updated_by"),
+    created_date: date("created_date").default(sql`now()`),
+    updated_date: date("updated_date"),
+    created_by: integer("created_by"),
+	updated_by: integer("updated_by"),
 });
 
-export const transactionsInData = data.table("transactions", {
-	transactionsId: serial("transactions_id").primaryKey().notNull(),
-	transactionDate: date("transaction_date"),
-	customerId: integer("customer_id"),
-	laundryServiceId: integer("laundry_service_id"),
-	perfumeId: integer("perfume_id"),
-	totalPrice: numeric("total_price"),
-	updatedDate: date("updated_date"),
-	createdBy: integer("created_by"),
-	updatedBy: integer("updated_by"),
+export const perfumesInData = mySchema.table(`perfumes`, {
+    perfumes_id: serial("perfumes_id").primaryKey(),
+    perfume_name: varchar("perfume_name", { length: 50 }).notNull(),
+    price: numeric("price"),
+    description: varchar("description", { length: 100 }),
+    status: smallint("status"),
+    created_date: date("created_date").default(sql`now()`),
+    updated_date: date("updated_date"),
+    created_by: integer("created_by"),
+	updated_by: integer("updated_by"),
+});
+
+export const laundryServicesInData = mySchema.table(`laundry_services`, {
+    laundry_services_id: serial("laundry_services_id").primaryKey(),
+    service_name: varchar("service_name", { length: 100 }).notNull(),
+    price: numeric("price"),
+    status: smallint("status"),
+    created_date: date("created_date").default(sql`now()`),
+    updated_date: date("updated_date"),
+    created_by: integer("created_by"),
+	updated_by: integer("updated_by"),
+});
+
+export const customersInData = mySchema.table(`customers`, {
+    customers_id: serial("customers_id").primaryKey(),
+    customer_name: varchar("customer_name", { length: 100 }).notNull(),
+    number_of_transaction: integer("number_of_transaction"),
+    phone_number: varchar("phone_number", { length: 25 }),
+    wa_available: boolean("wa_available"),
+    last_transaction: date("last_transaction"),
+    address: varchar("address", { length: 150 }),
+    created_date: date("created_date").default(sql`now()`),
+    updated_date: date("updated_date"),
+    created_by: integer("created_by"),
+	updated_by: integer("updated_by"),
+});
+
+export const transactionsInData = mySchema.table(`transactions`, {
+    transactions_id: serial("transactions_id").primaryKey(),
+    transaction_date: date("transaction_date").default(sql`now()`),
+    customer_id: integer("customer_id").references(() => customersInData.customers_id),
+    laundry_service_id: integer("laundry_service_id").references(() => laundryServicesInData.laundry_services_id),
+    perfume_id: integer("perfume_id").references(() => perfumesInData.perfumes_id),
+    total_price: numeric("total_price"),
+    updated_date: date("updated_date"),
+    created_by: integer("created_by"),
+	updated_by: integer("updated_by"),
 }, (table) => [
-	foreignKey({
-			columns: [table.customerId],
-			foreignColumns: [customersInData.customersId],
-			name: "transactions_customer_id_customers_customers_id_fk"
-		}),
-	foreignKey({
-			columns: [table.laundryServiceId],
-			foreignColumns: [laundryServicesInData.laundryServicesId],
-			name: "transactions_service_id_services_services_id_fk"
-		}),
-	foreignKey({
-			columns: [table.perfumeId],
-			foreignColumns: [perfumesInData.perfumesId],
-			name: "transactions_perfume_id_perfumes_perfumes_id_fk"
-		}),
+    foreignKey({
+            columns: [table.customer_id],
+            foreignColumns: [customersInData.customers_id],
+            name: "transactions_customer_id_customers_customers_id_fk"
+        }),
+    foreignKey({
+            columns: [table.laundry_service_id],
+            foreignColumns: [laundryServicesInData.laundry_services_id],
+            name: "transactions_service_id_services_services_id_fk"
+        }),
+    foreignKey({
+            columns: [table.perfume_id],
+            foreignColumns: [perfumesInData.perfumes_id],
+            name: "transactions_perfume_id_perfumes_perfumes_id_fk"
+        }),
 ]);
-
-export const perfumesInData = data.table("perfumes", {
-	perfumesId: serial("perfumes_id").primaryKey().notNull(),
-	perfumeName: varchar("perfume_name", { length: 50 }).notNull(),
-	price: numeric(),
-	description: varchar({ length: 100 }),
-	status: smallint(),
-	createdDate: date("created_date"),
-	updatedDate: date("updated_date"),
-	createdBy: integer("created_by"),
-	updatedBy: integer("updated_by"),
-});
-
-export const customersInData = data.table("customers", {
-	customersId: serial("customers_id").primaryKey().notNull(),
-	customerName: varchar("customer_name", { length: 100 }).notNull(),
-	numberOfTransaction: integer("number_of_transaction"),
-	phoneNumber: varchar("phone_number", { length: 25 }),
-	waAvailable: boolean("wa_available"),
-	lastTransaction: date("last_transaction"),
-	address: varchar({ length: 150 }),
-	createdDate: date("created_date"),
-	updatedDate: date("updated_date"),
-	createdBy: integer("created_by"),
-	updatedBy: integer("updated_by"),
-});
-
-export const laundryServicesInData = data.table("laundry_services", {
-	laundryServicesId: serial("laundry_services_id").primaryKey().notNull(),
-	serviceName: varchar("service_name", { length: 100 }).notNull(),
-	price: numeric(),
-	status: smallint(),
-	createdDate: date("created_date"),
-	updatedDate: date("updated_date"),
-	createdBy: integer("created_by"),
-	updatedBy: integer("updated_by"),
-});

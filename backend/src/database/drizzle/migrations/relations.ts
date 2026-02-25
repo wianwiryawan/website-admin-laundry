@@ -3,16 +3,16 @@ import { customersInData, transactionsInData, laundryServicesInData, perfumesInD
 
 export const transactionsInDataRelations = relations(transactionsInData, ({one}) => ({
 	customersInDatum: one(customersInData, {
-		fields: [transactionsInData.customerId],
-		references: [customersInData.customersId]
+		fields: [transactionsInData.customer_id],
+		references: [customersInData.customers_id]
 	}),
 	laundryServicesInDatum: one(laundryServicesInData, {
-		fields: [transactionsInData.laundryServiceId],
-		references: [laundryServicesInData.laundryServicesId]
+		fields: [transactionsInData.laundry_service_id],
+		references: [laundryServicesInData.laundry_services_id]
 	}),
 	perfumesInDatum: one(perfumesInData, {
-		fields: [transactionsInData.perfumeId],
-		references: [perfumesInData.perfumesId]
+		fields: [transactionsInData.perfume_id],
+		references: [perfumesInData.perfumes_id]
 	}),
 }));
 

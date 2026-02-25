@@ -3,7 +3,7 @@ import { config } from "./db.keys";
 
 export default defineConfig({
   out: "./src/database/drizzle/migrations",
-  schema: "./src/database/drizzle/schema/*",
+  schema: "./src/database/drizzle/migrations/schema.ts",
   dialect: "postgresql",
   dbCredentials: {
     host: config.DB_HOST,
