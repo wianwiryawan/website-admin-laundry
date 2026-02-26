@@ -20,8 +20,7 @@ export const getLaundryById = async (req: Request, res: Response) => {
         }
         res.json(result);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        handleError(res, error);
     }
 };
 
@@ -33,16 +32,31 @@ export const addLaundryServiceHandler = async (req: Request, res: Response) => {
         // console.error("Error prototype:", Object.getPrototypeOf(error));
         // console.error("Is ZodError:", error instanceof ZodError);
         // console.error("Error constructor:", error?.constructor?.name);
-        if (error instanceof ZodError) {
+        handleError(res, error);
+    }
+};
+
+export const updateLaundryServiceHandler = async (req: Request, res: Response) => {
+    try {
+        const id = Number(req.params.id);
+        const laundryData = req.body;
+        const result = await laundryServicesService.updateLaundryServiceById(id, laundryData);
+        res.json(result);
+    } catch (error) {
+        handleError(res, error);
+    };
+};
+
+function handleError(res: Response, error: any) {
+    if (error instanceof ZodError) {
             // validation failed
             console.error(error);
             return res.status(400).json({
                 error: 'Validation Error',
                 details: error,
             });
-        }
+        };
         // any other error
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-};
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error'});
+}

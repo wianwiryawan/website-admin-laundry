@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "../../database/drizzle/db";
 import { laundryServicesInData } from '../../database/drizzle/migrations/schema';
-import { createLaundryServiceValidation } from './laundry-services.validation';
+import { createLaundryServiceValidation, updateLaundryServiceValidation } from './laundry-services.validation';
 
 // Services: Handle business logic and talk to the database.
 
@@ -28,4 +28,22 @@ export const addLaundryService = async (laundryServicesData: unknown) => {
 
     // Use validated data
     return db.insert(laundryServicesInData).values(validatedData);
+};
+
+export const updateLaundryServiceById = async (laundryServiceId: number, laundryServicesData: unknown) => {
+    const result = updateLaundryServiceValidation.safeParse(laundryServicesData);
+    if(!result.success){
+        throw result.error;
+    }
+
+    const validatedData = {
+        ...result.data,
+        updated_date: new Date().toISOString(),
+    };
+
+    return db.update(laundryServicesInData)
+        .set(validatedData)
+        .where(
+            eq(laundryServicesInData.laundry_services_id, laundryServiceId)
+        );
 };

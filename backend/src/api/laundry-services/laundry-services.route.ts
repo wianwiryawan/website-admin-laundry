@@ -24,4 +24,13 @@ router.get('/:id', async (req, res, next) => {
     }
 });
 
+// Edit existing laundry service by id
+router.get('/:id', async (req, res, next) => {
+    try {
+        await laundryServiceController.updateLaundryServiceHandler(req, res);
+    } catch (error) {
+        next(error);
+    }
+})
+
 export default router;

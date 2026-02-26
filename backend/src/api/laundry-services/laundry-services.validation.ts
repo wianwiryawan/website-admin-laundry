@@ -12,9 +12,21 @@ import { laundryServicesInData } from '../../database/drizzle/migrations/schema'
 // | `nullish`  | string, `null`, `undefined` | number, boolean, etc. |
 
 const insertLaundryServiceSchema = createInsertSchema(laundryServicesInData);
+const updateLaundryServiceSchema = createInsertSchema(laundryServicesInData);
 
 export const createLaundryServiceValidation = insertLaundryServiceSchema.extend({
     service_name: z.string().min(1).max(100),
     price: z.string()
+});
+
+export const updateLaundryServiceValidation = updateLaundryServiceSchema.extend({
+    service_name: z.string().min(1).max(100),
+    price: z.string(),
+    status: z.number(),
+    updated_date: z.preprocess(
+    (val) => {
+        if (typeof val === "string" || val instanceof Date) return new Date(val);
+    },
+    z.date()),
 });
 
