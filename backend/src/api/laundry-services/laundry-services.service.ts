@@ -47,3 +47,21 @@ export const updateLaundryServiceById = async (laundryServiceId: number, laundry
             eq(laundryServicesInData.laundry_services_id, laundryServiceId)
         );
 };
+
+export const softDeleteLaundryServiceById = async (laundryServiceId: number, laundryServiceData: unknown) => {
+    const result = updateLaundryServiceValidation.safeParse(laundryServiceData);
+    if (!result.success) {
+        throw result.error;
+    }
+
+    const validatedData = {
+        ...result.data,
+        updated_date: new Date().toISOString(),
+    };
+
+    return db.update(laundryServicesInData)
+        .set(validatedData)
+        .where(
+            eq(laundryServicesInData.laundry_services_id, laundryServiceId)
+    );
+};

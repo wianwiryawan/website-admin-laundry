@@ -47,6 +47,16 @@ export const updateLaundryServiceHandler = async (req: Request, res: Response) =
     };
 };
 
+export const softDeleteLaundryServiceHandler = async (req: Request, res: Response) => {
+    try {
+        const id = Number(req.params.id);
+        const result = await laundryServicesService.softDeleteLaundryServiceById(id, req.body);
+        res.json(result);
+    } catch (error) {
+        handleError(res, error);
+    }
+}
+
 function handleError(res: Response, error: any) {
     if (error instanceof ZodError) {
             // validation failed
