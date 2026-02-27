@@ -21,6 +21,14 @@ router.get('/:id', async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-})
+});
+
+router.put('/edit/:id', async (req, res, next) => {
+    try {
+        await transactionController.updateTransactionByIdHandler(req, res);
+    } catch (error) {
+        next(error);
+    }
+});
 
 export default router;

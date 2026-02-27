@@ -1,6 +1,6 @@
 import { db } from "../../database/drizzle/db";
 import { transactionsInData } from "../../database/drizzle/migrations/schema";
-import { createTransactionValidation } from "./transactions.validation";
+import { createTransactionValidation, updateTransactionValidation } from "./transactions.validation";
 import { eq } from "drizzle-orm";
 
 // Services: Handle business logic and talk to the database.
@@ -33,3 +33,24 @@ export const addTransaction = async (transactionsData: unknown) => {
     // Use validated data
     return db.insert(transactionsInData).values(validatedData);
 };
+
+export const updateTransactionById = async (transactionsId: number, transactionsData: unknown) => {
+    const result = updateTransactionValidation.safeParse(transactionsData);
+    if (!result.success) {
+        throw result.error;
+    }
+
+    const validatedData = {
+        ...result.data,
+        transaction_date: result.data.transaction_date instanceof Date
+        ? result.data.transaction_date.toISOString()
+        : result.data.transaction_date,
+        updated_date: new Date().toISOString()
+    };
+
+    return db.update(transactionsInData)
+        .set(validatedData)
+        .where(
+            eq(transactionsInData.transactions_id, transactionsId)
+        );
+}

@@ -20,15 +20,7 @@ export const getTransactionById = async (req: Request, res: Response) => {
         }
         res.status(201).json(result);
     } catch (error) {
-        if (error instanceof ZodError) {
-            // validation failed
-            return res.status(400).json({
-                error: 'Validation Error',
-                details: error,
-            });
-        }
-        // any other error
-        res.status(500).json({ error: 'Internal Server Error' });
+        handleError(res, error);
     }
 }
 
@@ -37,16 +29,30 @@ export const addTransactionHandler = async (req: Request, res: Response) => {
         const result = await transactionsService.addTransaction(req.body);
         res.status(201).json(result);
     } catch (error) {
-        if (error instanceof ZodError) {
+        handleError(res, error);
+    }
+};
+
+export const updateTransactionByIdHandler = async (req: Request, res: Response) => {
+    try {
+        const id = Number(req.params.id);
+        const result = await transactionsService.updateTransactionById(id, req.body);
+        res.json(result);
+    } catch (error) {
+        handleError(res, error);
+    }
+};
+
+function handleError(res: Response, error: any) {
+    if (error instanceof ZodError) {
             // validation failed
             console.error(error);
             return res.status(400).json({
                 error: 'Validation Error',
                 details: error,
             });
-        }
+        };
         // any other error
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-};
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error'});
+}
