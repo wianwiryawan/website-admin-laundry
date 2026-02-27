@@ -34,7 +34,7 @@ router.get('/edit/:id', async (req, res, next) => {
 })
 
 // Soft delete existing laundry service by id
-router.delete('/delete/:id', async (req, res, next) => {
+router.put('/delete/:id', async (req, res, next) => {
     try {
         await laundryServiceController.softDeleteLaundryServiceHandler(req, res);
     } catch (error) {
