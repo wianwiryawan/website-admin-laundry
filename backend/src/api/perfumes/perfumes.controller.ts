@@ -67,7 +67,7 @@ export const updatePerfumeByIdHandler = async (req: Request, res: Response) => {
 export const softDeletePerfumeByIdHandler = async (req: Request, res: Response) => {
     try {
         const id = Number(req.params.id);
-        const result = await perfumeService.updatePerfumeById(id, req.body);
+        const result = await perfumeService.softDeletePerfumeById(id, req.body);
         res.json(result);
     } catch (error) {
         if (error instanceof ZodError) {
