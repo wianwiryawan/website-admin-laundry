@@ -57,7 +57,7 @@ export const transactionsInData = mySchema.table(`transactions`, {
     customer_id: integer("customer_id").references(() => customersInData.customers_id),
     laundry_service_id: integer("laundry_service_id").references(() => laundryServicesInData.laundry_services_id),
     perfume_id: integer("perfume_id").references(() => perfumesInData.perfumes_id),
-    total_price: numeric("total_price"),
+    total_price: integer("total_price"),
     updated_date: date("updated_date"),
     created_by: integer("created_by"),
 	updated_by: integer("updated_by"),
