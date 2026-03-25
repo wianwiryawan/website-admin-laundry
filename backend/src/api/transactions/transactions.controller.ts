@@ -47,6 +47,7 @@ export const softDeleteTransactionByIdHandler = async (req: Request, res: Respon
     try {
         const id = Number(req.params.id);
         const result = await transactionsService.softDeletePerfumeById(id, req.body);
+        res.json(result);
     } catch (error) {
         handleError(res, error);
     }
