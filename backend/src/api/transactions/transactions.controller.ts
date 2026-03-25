@@ -43,6 +43,15 @@ export const updateTransactionByIdHandler = async (req: Request, res: Response) 
     }
 };
 
+export const softDeleteTransactionByIdHandler = async (req: Request, res: Response) => {
+    try {
+        const id = Number(req.params.id);
+        const result = await transactionsService.softDeletePerfumeById(id, req.body);
+    } catch (error) {
+        handleError(res, error);
+    }
+};
+
 function handleError(res: Response, error: any) {
     if (error instanceof ZodError) {
             // validation failed

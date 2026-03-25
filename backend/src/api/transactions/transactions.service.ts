@@ -54,3 +54,24 @@ export const updateTransactionById = async (transactionsId: number, transactions
             eq(transactionsInData.transactions_id, transactionsId)
         );
 }
+
+export const softDeletePerfumeById = async (transactionId: number, transactionData: unknown) => {
+    const result = updateTransactionValidation.safeParse(transactionData);
+    if (!result.success) {
+        throw result.error;
+    }
+
+    let validatedData = {
+        ...result.data,
+        transaction_date: result.data.transaction_date instanceof Date
+        ? result.data.transaction_date.toISOString()
+        : result.data.transaction_date,
+        updated_date: new Date().toISOString() // Add current timestamp for updated_date
+    };
+
+    return db.update(transactionsInData)
+        .set(validatedData)
+        .where(
+            eq(transactionsInData.transactions_id, transactionId)
+        ).returning();
+}

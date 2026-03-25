@@ -31,4 +31,12 @@ router.put('/edit/:id', async (req, res, next) => {
     }
 });
 
+router.put('/delete/:id', async (req, res, next) => {
+    try {
+        await transactionController.softDeleteTransactionByIdHandler(req, res);
+    } catch (error) {
+        next(error);
+    }
+});
+
 export default router;
