@@ -4,9 +4,9 @@
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "data.customers": {
+    "public.customers": {
       "name": "customers",
-      "schema": "data",
+      "schema": "public",
       "columns": {
         "customers_id": {
           "name": "customers_id",
@@ -84,9 +84,9 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "data.laundry_services": {
+    "public.laundry_services": {
       "name": "laundry_services",
-      "schema": "data",
+      "schema": "public",
       "columns": {
         "laundry_services_id": {
           "name": "laundry_services_id",
@@ -146,9 +146,9 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "data.perfumes": {
+    "public.perfumes": {
       "name": "perfumes",
-      "schema": "data",
+      "schema": "public",
       "columns": {
         "perfumes_id": {
           "name": "perfumes_id",
@@ -214,9 +214,9 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "data.transactions": {
+    "public.transactions": {
       "name": "transactions",
-      "schema": "data",
+      "schema": "public",
       "columns": {
         "transactions_id": {
           "name": "transactions_id",
@@ -280,7 +280,7 @@
           "name": "transactions_customer_id_customers_customers_id_fk",
           "tableFrom": "transactions",
           "tableTo": "customers",
-          "schemaTo": "data",
+          "schemaTo": "public",
           "columnsFrom": [
             "customer_id"
           ],
@@ -294,7 +294,7 @@
           "name": "transactions_laundry_service_id_laundry_services_laundry_services_id_fk",
           "tableFrom": "transactions",
           "tableTo": "laundry_services",
-          "schemaTo": "data",
+          "schemaTo": "public",
           "columnsFrom": [
             "laundry_service_id"
           ],
@@ -308,7 +308,7 @@
           "name": "transactions_perfume_id_perfumes_perfumes_id_fk",
           "tableFrom": "transactions",
           "tableTo": "perfumes",
-          "schemaTo": "data",
+          "schemaTo": "public",
           "columnsFrom": [
             "perfume_id"
           ],
@@ -322,7 +322,7 @@
           "name": "transactions_service_id_services_services_id_fk",
           "tableFrom": "transactions",
           "tableTo": "laundry_services",
-          "schemaTo": "data",
+          "schemaTo": "public",
           "columnsFrom": [
             "laundry_service_id"
           ],
@@ -339,9 +339,9 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "data.users": {
+    "public.users": {
       "name": "users",
-      "schema": "data",
+      "schema": "public",
       "columns": {
         "users_id": {
           "name": "users_id",
@@ -351,7 +351,7 @@
           "identity": {
             "type": "always",
             "name": "users_id",
-            "schema": "data",
+            "schema": "public",
             "increment": "1",
             "startWith": "1",
             "minValue": "1",
@@ -415,7 +415,7 @@
   },
   "enums": {},
   "schemas": {
-    "data": "data"
+    "public": "public"
   },
   "sequences": {},
   "roles": {},

@@ -4,9 +4,9 @@
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "data.perfumes": {
+    "public.perfumes": {
       "name": "perfumes",
-      "schema": "data",
+      "schema": "public",
       "columns": {
         "perfumes_id": {
           "name": "perfumes_id",
@@ -47,9 +47,9 @@
       "policies": {},
       "isRLSEnabled": false
     },
-    "data.customers": {
+    "public.customers": {
       "name": "customers",
-      "schema": "data",
+      "schema": "public",
       "columns": {
         "customers_id": {
           "name": "customers_id",
@@ -102,9 +102,9 @@
       "policies": {},
       "isRLSEnabled": false
     },
-    "data.services": {
+    "public.services": {
       "name": "services",
-      "schema": "data",
+      "schema": "public",
       "columns": {
         "services_id": {
           "name": "services_id",
@@ -139,9 +139,9 @@
       "policies": {},
       "isRLSEnabled": false
     },
-    "data.users": {
+    "public.users": {
       "name": "users",
-      "schema": "data",
+      "schema": "public",
       "columns": {
         "users_id": {
           "name": "users_id",
@@ -150,14 +150,14 @@
           "notNull": true,
           "identity": {
             "type": "always",
-            "name": "data.users_id",
+            "name": "public.users_id",
             "increment": "1",
             "minValue": "1",
             "maxValue": "2147483647",
             "startWith": "1",
             "cache": "1",
             "cycle": false,
-            "schema": "data"
+            "schema": "public"
           }
         },
         "username": {
@@ -187,9 +187,9 @@
       "policies": {},
       "isRLSEnabled": false
     },
-    "data.transactions": {
+    "public.transactions": {
       "name": "transactions",
-      "schema": "data",
+      "schema": "public",
       "columns": {
         "transactions_id": {
           "name": "transactions_id",
@@ -234,7 +234,7 @@
           "name": "transactions_customer_id_customers_customers_id_fk",
           "tableFrom": "transactions",
           "tableTo": "customers",
-          "schemaTo": "data",
+          "schemaTo": "public",
           "columnsFrom": [
             "customer_id"
           ],
@@ -248,7 +248,7 @@
           "name": "transactions_service_id_services_services_id_fk",
           "tableFrom": "transactions",
           "tableTo": "services",
-          "schemaTo": "data",
+          "schemaTo": "public",
           "columnsFrom": [
             "service_id"
           ],
@@ -262,7 +262,7 @@
           "name": "transactions_perfume_id_perfumes_perfumes_id_fk",
           "tableFrom": "transactions",
           "tableTo": "perfumes",
-          "schemaTo": "data",
+          "schemaTo": "public",
           "columnsFrom": [
             "perfume_id"
           ],
@@ -282,7 +282,7 @@
   },
   "enums": {},
   "schemas": {
-    "data": "data"
+    "public": "public"
   },
   "sequences": {},
   "roles": {},
