@@ -7,5 +7,8 @@ export NVM_DIR="$HOME/.nvm"
 # Use specific Node version
 nvm use
 
+# Run npm install
+npm install
+
 # Run your Next.js app
 dotenvx run -- npx tsx app.ts

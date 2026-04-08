@@ -3,5 +3,8 @@
     "types": ["node"],
     "esModuleInterop": true,
     "strict": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
 }

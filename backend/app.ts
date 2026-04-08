@@ -39,4 +39,4 @@ app.use('/perfumes-management/perfumes', perfumesRoutes);
 app.use('/transactions-management/transactions', transactionRoutes);
 
 const PORT = process.env.NODE_PORT || 3002;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
