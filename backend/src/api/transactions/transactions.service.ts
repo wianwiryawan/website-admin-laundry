@@ -31,7 +31,14 @@ export const addTransaction = async (transactionsData: unknown) => {
     };
     
     // Use validated data
-    return db.insert(transactionsInData).values(validatedData);
+    const inserted = await db
+        .insert(transactionsInData)
+        .values(validatedData)
+        .returning();
+    return {
+        message: "User created successfully",
+        data: inserted[0]
+    };
 };
 
 export const updateTransactionById = async (transactionsId: number, transactionsData: unknown) => {

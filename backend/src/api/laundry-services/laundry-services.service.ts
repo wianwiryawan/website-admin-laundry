@@ -27,7 +27,14 @@ export const addLaundryService = async (laundryServicesData: unknown) => {
     const validatedData = result.data;
 
     // Use validated data
-    return db.insert(laundryServicesInData).values(validatedData);
+    const inserted = await db
+        .insert(laundryServicesInData)
+        .values(validatedData)
+        .returning()
+    return {
+        message: "User created successfully",
+        data: inserted[0]
+    };
 };
 
 export const updateLaundryServiceById = async (laundryServiceId: number, laundryServicesData: unknown) => {

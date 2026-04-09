@@ -26,7 +26,14 @@ export const addPerfume = async (perfumeData: unknown) => {
     const validatedData = result.data;
 
     // Use validated data
-    return db.insert(perfumesInData).values(validatedData);
+    const inserted = await db
+        .insert(perfumesInData)
+        .values(validatedData)
+        .returning()
+    return {
+        message: "User created successfully",
+        data: inserted[0]
+    };
 }
 
 export const updatePerfumeById = async (perfumeId: number, perfumeData: unknown) => {

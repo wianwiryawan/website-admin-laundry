@@ -32,7 +32,14 @@ export const addCustomer = async (customerData: unknown) => {
     };
 
     // Use validated data
-    return db.insert(customersInData).values(validatedData);
+    const inserted = await db
+        .insert(customersInData)
+        .values(validatedData)
+        .returning()
+    return {
+        message: "User created successfully",
+        data: inserted[0]
+    };
 };
 
 export const updateCustomerById = async (customerId: number, customerData: unknown) => {

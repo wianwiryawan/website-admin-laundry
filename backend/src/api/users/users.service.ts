@@ -26,7 +26,14 @@ export const addUser = async (userData: unknown) => {
     const validatedData = result.data;
 
     // Use validated data
-    return db.insert(usersInData).values(validatedData);
+    const inserted = await db
+        .insert(usersInData)
+        .values(validatedData)
+        .returning()
+    return {
+        message: "User created successfully",
+        data: inserted[0]
+    };
 }
 
 export const updateUserById = async (userId: number, userData: unknown) => {
