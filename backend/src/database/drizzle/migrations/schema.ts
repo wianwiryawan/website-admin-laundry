@@ -1,9 +1,10 @@
-import { pgSchema, foreignKey, serial, boolean, smallint, varchar, numeric,integer, date } from "drizzle-orm/pg-core";
+import { pgTable, pgSchema, foreignKey, serial, boolean, smallint, varchar, numeric,integer, date } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm"
 
-export const mySchema = pgSchema("public");
+// unused since pg default schema is public
+// export const mySchema = pgSchema("public");
 
-export const usersInData = mySchema.table(`users`, {
+export const usersInData = pgTable(`users`, {
 	users_id: integer().primaryKey().generatedAlwaysAsIdentity({ name: "users_id", startWith: 1, increment: 1, minValue: 1, maxValue: 2147483647, cache: 1 }),
 	username: varchar({ length: 100 }).notNull(),
 	status: smallint(),
@@ -14,7 +15,7 @@ export const usersInData = mySchema.table(`users`, {
 	updated_by: integer("updated_by"),
 });
 
-export const perfumesInData = mySchema.table(`perfumes`, {
+export const perfumesInData = pgTable(`perfumes`, {
     perfumes_id: serial("perfumes_id").primaryKey(),
     perfume_name: varchar("perfume_name", { length: 50 }).notNull(),
     price: numeric("price"),
@@ -26,7 +27,7 @@ export const perfumesInData = mySchema.table(`perfumes`, {
 	updated_by: integer("updated_by"),
 });
 
-export const laundryServicesInData = mySchema.table(`laundry_services`, {
+export const laundryServicesInData = pgTable(`laundry_services`, {
     laundry_services_id: serial("laundry_services_id").primaryKey(),
     service_name: varchar("service_name", { length: 100 }).notNull(),
     price: numeric("price"),
@@ -37,7 +38,7 @@ export const laundryServicesInData = mySchema.table(`laundry_services`, {
 	updated_by: integer("updated_by"),
 });
 
-export const customersInData = mySchema.table(`customers`, {
+export const customersInData = pgTable(`customers`, {
     customers_id: serial("customers_id").primaryKey(),
     customer_name: varchar("customer_name", { length: 100 }).notNull(),
     number_of_transaction: integer("number_of_transaction"),
@@ -51,7 +52,7 @@ export const customersInData = mySchema.table(`customers`, {
 	updated_by: integer("updated_by"),
 });
 
-export const transactionsInData = mySchema.table(`transactions`, {
+export const transactionsInData = pgTable(`transactions`, {
     transactions_id: serial("transactions_id").primaryKey(),
     transaction_date: date("transaction_date").default(sql`now()`),
     customer_id: integer("customer_id").references(() => customersInData.customers_id),
