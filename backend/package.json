@@ -4,7 +4,8 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "dotenvx run -- npx tsx app.ts"
+    "dev": "dotenvx run -- npx nodemon --watch . --ext ts,js --exec tsx app.ts",
+    "prod": "dotenvx run -- npx tsx app.ts"
   },
   "keywords": [],
   "author": "wianwiryawan@gmail.com",
