@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import { getApiBaseUrl } from "@/lib/utils";
 
 export async function GET(request: NextRequest) {
   //   const response = await fetch('https://localhost/api/users', {
@@ -6,7 +7,7 @@ export async function GET(request: NextRequest) {
   //     headers: { Authorization: `Bearer ${process.env.API_TOKEN}` },
   //   });
 
-  const response = await fetch("https://localhost:3002/api/customers");
+  const response = await fetch(`${getApiBaseUrl()}/api/customers`);
 
   // Transform or forward the response
   const data = await response.json();
