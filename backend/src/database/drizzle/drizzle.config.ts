@@ -1,9 +1,11 @@
 import { defineConfig } from "drizzle-kit";
 import { config } from "./db.keys";
 
+var DRIZZLE_PATH="./src/database/drizzle";
+
 export default defineConfig({
-  out: "./src/database/drizzle/migrations",
-  schema: "./src/database/drizzle/migrations/schema.ts",
+  out: DRIZZLE_PATH + "/migrations",
+  schema: DRIZZLE_PATH + "/migrations/schema.ts",
   dialect: "postgresql",
   dbCredentials: {
     host: config.DB_HOST,
@@ -12,8 +14,7 @@ export default defineConfig({
     database: config.DB_NAME,
     password: config.DB_PASSWORD,
     ssl: false,
-  },
-  schemaFilter: ["data"],
+  }
 });
 
 // To generate
