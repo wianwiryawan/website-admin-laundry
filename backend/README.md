@@ -6,7 +6,7 @@ PostgreSQL is used for this project database
 
 Add .env file on project root that contain these variable:
 
-```.env
+```shell
 DB_HOST=string // Ip address of your db
 DB_NAME=string // Name of your db
 DB_PORT=string // Port where your db listen to
