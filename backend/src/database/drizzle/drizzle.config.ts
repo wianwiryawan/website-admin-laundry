@@ -1,7 +1,7 @@
 import { defineConfig } from "drizzle-kit";
 import { config } from "./db.keys";
 
-var DRIZZLE_PATH="./src/database/drizzle";
+const DRIZZLE_PATH="./src/database/drizzle";
 
 export default defineConfig({
   out: DRIZZLE_PATH + "/migrations",
