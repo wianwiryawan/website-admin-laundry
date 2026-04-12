@@ -1,10 +1,12 @@
 import express, { Request, Response, Application } from 'express';
 import cors from 'cors';
-import userRoutes from './src/api/users/users.route';
-import customerRoutes from './src/api/customers/customers.route';
-import laundryRoutes from './src/api/laundry-services/laundry-services.route';
-import perfumesRoutes from './src/api/perfumes/perfumes.route';
-import transactionRoutes from './src/api/transactions/transactions.route';
+import authLoginRoutes from './src/api/auth/login/route';
+// import authRegisterRoutes from './src/api/auth/register/route';
+import userRoutes from './src/api/users/route';
+import customerRoutes from './src/api/customers/route';
+import laundryRoutes from './src/api/laundry-services/route';
+import perfumesRoutes from './src/api/perfumes/route';
+import transactionRoutes from './src/api/transactions/route';
 
 const app: Application = express();
 
@@ -23,20 +25,26 @@ app.get('/api', (req: Request, res: Response) => {
   res.send({ message: 'Hello from Express!' });
 });
 
+// Mount the auth login routes
+app.use('/api/auth/login', authLoginRoutes);
+
+// Mount the auth register routes
+// app.use('/api/auth/register', authRegisterRoutes); // unused for now, can be implemented later when needed
+
 // Mount the users routes
-app.use('/users-management/users', userRoutes);
+app.use('/api/users', userRoutes);
 
 // Mount the customer routes
-app.use('/customers-management/customers', customerRoutes);
+app.use('/api/customers', customerRoutes);
 
 // Mount the laundry routes
-app.use('/laundry-services-management/laundry-services', laundryRoutes);
+app.use('/api/laundry-services', laundryRoutes);
 
 // Mount the perfume routes
-app.use('/perfumes-management/perfumes', perfumesRoutes);
+app.use('/api/perfumes', perfumesRoutes);
 
 // Mount the transaction routes
-app.use('/transactions-management/transactions', transactionRoutes);
+app.use('/api/transactions', transactionRoutes);
 
 const PORT = process.env.NODE_PORT || 3002;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
