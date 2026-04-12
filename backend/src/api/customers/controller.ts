@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import * as customerService from './customers.service';
+import * as customerService from './service';
 import { ZodError } from "zod";
 
 // Controllers: Handle HTTP request/response only.

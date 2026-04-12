@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "../../database/drizzle/db";
 import { laundryServicesInData } from '../../database/drizzle/migrations/schema';
-import { createLaundryServiceValidation, updateLaundryServiceValidation } from './laundry-services.validation';
+import { createLaundryServiceValidation, updateLaundryServiceValidation } from './validation';
 
 // Services: Handle business logic and talk to the database.
 

@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "../../database/drizzle/db";
 import { perfumesInData } from '../../database/drizzle/migrations/schema';
-import { createPerfumeValidation, updatePerfumeValidation } from "./perfumes.validation";
+import { createPerfumeValidation, updatePerfumeValidation } from "./validation";
 
 // Services: Handle business logic and talk to the database.
 

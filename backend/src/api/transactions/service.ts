@@ -1,6 +1,6 @@
 import { db } from "../../database/drizzle/db";
 import { transactionsInData } from "../../database/drizzle/migrations/schema";
-import { createTransactionValidation, updateTransactionValidation } from "./transactions.validation";
+import { createTransactionValidation, updateTransactionValidation } from "./validation";
 import { eq } from "drizzle-orm";
 
 // Services: Handle business logic and talk to the database.

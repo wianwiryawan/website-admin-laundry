@@ -1,45 +1,45 @@
 import { Router } from "express";
-import * as perfumeController from './perfumes.controller';
+import * as usersController from './controller';
 
 const router = Router();
 
-// List all perfume
-router.get('/', perfumeController.getAllPerfumesHandler);
+// List all users
+router.get('/', usersController.getAllUsersHandler);
 
-// Add new perfume
+// Add new user
 router.post('/add', async (req, res, next) => {
     try {
-        await perfumeController.addPerfumeHandler(req, res);
+        await usersController.addUserHandler(req, res);
     } catch (error) {
         next(error);
     }
 });
 
-// Get perfume by id
+// Get user by id
 router.get('/:id', async (req, res, next) => {
     try {
-        await perfumeController.getPerfumeByIdHandler(req, res);
+        await usersController.getUserById(req, res);
     } catch (error) {
         next(error);
     }
 });
 
-// Edit perfume by id
+// Edit user by id
 router.put('/edit/:id', async (req, res, next) => {
     try {
-        await perfumeController.updatePerfumeByIdHandler(req, res);
-    } catch (error) {
-        next(error);
-    }
-});
-
-// Soft delete perfume by id
-router.put('/delete/:id', async (req, res, next) => {
-    try {
-        await perfumeController.softDeletePerfumeByIdHandler(req, res);
+        await usersController.editUserById(req, res);
     } catch (error) {
         next(error);
     }
 })
+
+// Soft delete user by id
+router.put('/delete/:id', async (req, res, next) => {
+    try {
+        await usersController.softDeleteUserById(req, res);
+    } catch (error) {
+        next(error);
+    }
+});
 
 export default router;

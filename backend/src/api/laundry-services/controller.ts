@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import * as laundryServicesService from './laundry-services.service';
+import * as laundryServicesService from './service';
 import { ZodError } from "zod";
 
 // Controllers: Handle HTTP request/response only.

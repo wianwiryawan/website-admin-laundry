@@ -1,5 +1,5 @@
 import { Router } from "express";
-import * as laundryServiceController from './laundry-services.controller';
+import * as laundryServiceController from './controller';
 
 const router = Router();
 
