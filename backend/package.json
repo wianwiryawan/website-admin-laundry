@@ -13,6 +13,7 @@
   "description": "Laundry app with auth, CRUD functionality, and can generate report based on data.",
   "dependencies": {
     "@dotenvx/dotenvx": "^0.10.6",
+    "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "drizzle-orm": "^0.44.2",
     "drizzle-zod": "^0.8.3",
@@ -21,6 +22,7 @@
     "zod": "^4.0.5"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/pg": "^8.15.4",
