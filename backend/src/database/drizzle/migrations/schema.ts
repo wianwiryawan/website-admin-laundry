@@ -1,81 +1,102 @@
-import { pgTable, pgSchema, foreignKey, serial, boolean, smallint, varchar, numeric,integer, date } from "drizzle-orm/pg-core";
-import { sql } from "drizzle-orm"
+import { pgTable, serial, varchar, integer, boolean, timestamp, numeric, smallint, index } from "drizzle-orm/pg-core"
 
-// unused since pg default schema is public
-// export const mySchema = pgSchema("public");
-
-export const usersInData = pgTable(`users`, {
-	users_id: integer().primaryKey().generatedAlwaysAsIdentity({ name: "users_id", startWith: 1, increment: 1, minValue: 1, maxValue: 2147483647, cache: 1 }),
-	username: varchar({ length: 100 }).notNull(),
-	status: smallint(),
-	email: varchar({ length: 100 }).notNull(),
-    created_date: date("created_date").default(sql`now()`),
-    updated_date: date("updated_date"),
-    created_by: integer("created_by"),
-	updated_by: integer("updated_by"),
-});
-
-export const perfumesInData = pgTable(`perfumes`, {
-    perfumes_id: serial("perfumes_id").primaryKey(),
-    perfume_name: varchar("perfume_name", { length: 50 }).notNull(),
-    price: numeric("price"),
-    description: varchar("description", { length: 100 }),
-    status: smallint("status"),
-    created_date: date("created_date").default(sql`now()`),
-    updated_date: date("updated_date"),
-    created_by: integer("created_by"),
-	updated_by: integer("updated_by"),
-});
-
-export const laundryServicesInData = pgTable(`laundry_services`, {
-    laundry_services_id: serial("laundry_services_id").primaryKey(),
-    service_name: varchar("service_name", { length: 100 }).notNull(),
-    price: numeric("price"),
-    status: smallint("status"),
-    created_date: date("created_date").default(sql`now()`),
-    updated_date: date("updated_date"),
-    created_by: integer("created_by"),
-	updated_by: integer("updated_by"),
-});
-
-export const customersInData = pgTable(`customers`, {
-    customers_id: serial("customers_id").primaryKey(),
-    customer_name: varchar("customer_name", { length: 100 }).notNull(),
-    number_of_transaction: integer("number_of_transaction"),
-    phone_number: varchar("phone_number", { length: 25 }),
-    wa_available: boolean("wa_available"),
-    last_transaction: date("last_transaction"),
-    address: varchar("address", { length: 150 }),
-    created_date: date("created_date").default(sql`now()`),
-    updated_date: date("updated_date"),
-    created_by: integer("created_by"),
-	updated_by: integer("updated_by"),
-});
-
-export const transactionsInData = pgTable(`transactions`, {
-    transactions_id: serial("transactions_id").primaryKey(),
-    transaction_date: date("transaction_date").default(sql`now()`),
-    customer_id: integer("customer_id").references(() => customersInData.customers_id),
-    laundry_service_id: integer("laundry_service_id").references(() => laundryServicesInData.laundry_services_id),
-    perfume_id: integer("perfume_id").references(() => perfumesInData.perfumes_id),
-    total_price: integer("total_price"),
-    updated_date: date("updated_date"),
-    created_by: integer("created_by"),
-	updated_by: integer("updated_by"),
+export const customer = pgTable("customer", {
+	customerId: serial("customer_id").primaryKey().notNull(),
+	customerName: varchar("customer_name", { length: 100 }).notNull(),
+	phoneNumber: varchar("phone_number", { length: 25 }),
+	waAvailable: boolean("wa_available").$default(() => false),
+	address: varchar("address", { length: 150 }),
+	createdDate: timestamp("created_date").defaultNow().notNull(),
+	updatedDate: timestamp("updated_date"),
+	deletedDate: timestamp("deleted_date"),
+	createdBy: integer("created_by").notNull().references(() => user.userId),
+	updatedBy: integer("updated_by").references(() => user.userId),
+	deletedBy: integer("deleted_by").references(() => user.userId),
 }, (table) => [
-    foreignKey({
-            columns: [table.customer_id],
-            foreignColumns: [customersInData.customers_id],
-            name: "transactions_customer_id_customers_customers_id_fk"
-        }),
-    foreignKey({
-            columns: [table.laundry_service_id],
-            foreignColumns: [laundryServicesInData.laundry_services_id],
-            name: "transactions_service_id_services_services_id_fk"
-        }),
-    foreignKey({
-            columns: [table.perfume_id],
-            foreignColumns: [perfumesInData.perfumes_id],
-            name: "transactions_perfume_id_perfumes_perfumes_id_fk"
-        }),
+	index("idx_customer_created_by").on(table.createdBy),
+	index("idx_customer_updated_by").on(table.updatedBy),
+	index("idx_customer_deleted_by").on(table.deletedBy),
+]);
+
+export const perfume = pgTable("perfume", {
+	perfumeId: serial("perfume_id").primaryKey().notNull(),
+	perfumeName: varchar("perfume_name", { length: 50 }).notNull(),
+	price: numeric("price", { precision: 10, scale: 2 }),
+	description: varchar("description", { length: 100 }),
+	status: smallint("status").notNull().default(1).$type<0 | 1 | 2>(), // 0 = inactive, 1 = active, 2 = deleted
+	createdDate: timestamp("created_date").defaultNow().notNull(),
+	updatedDate: timestamp("updated_date"),
+	deletedDate: timestamp("deleted_date"),
+	createdBy: integer("created_by").notNull().references(() => user.userId),
+	updatedBy: integer("updated_by").references(() => user.userId),
+	deletedBy: integer("deleted_by").references(() => user.userId),
+}, (table) => [
+	index("idx_perfume_created_by").on(table.createdBy),
+	index("idx_perfume_updated_by").on(table.updatedBy),
+	index("idx_perfume_deleted_by").on(table.deletedBy),
+]);
+
+export const service = pgTable("service", {
+	serviceId: serial("service_id").primaryKey().notNull(),
+	serviceName: varchar("service_name", { length: 100 }).notNull(),
+	price: numeric("price", { precision: 10, scale: 2 }),
+	description: varchar("description", { length: 100 }),
+	status: smallint("status").notNull().default(1).$type<0 | 1 | 2>(), // 0 = inactive, 1 = active, 2 = deleted
+	createdDate: timestamp("created_date").defaultNow().notNull(),
+	updatedDate: timestamp("updated_date"),
+	deletedDate: timestamp("deleted_date"),
+	createdBy: integer("created_by").notNull().references(() => user.userId),
+	updatedBy: integer("updated_by").references(() => user.userId),
+	deletedBy: integer("deleted_by").references(() => user.userId),
+}, (table) => [
+	index("idx_service_created_by").on(table.createdBy),
+	index("idx_service_updated_by").on(table.updatedBy),
+	index("idx_service_deleted_by").on(table.deletedBy),
+]);
+
+export const transactions = pgTable("transactions", {
+	transactionsId: serial("transactions_id").primaryKey().notNull(),
+	transactionDate: timestamp("transaction_date").defaultNow().notNull(),
+	customerId: integer("customer_id").notNull().references(() => customer.customerId),
+	totalPrice: numeric("total_price", { precision: 10, scale: 2 }).notNull(),
+	createdDate: timestamp("created_date").defaultNow().notNull(),
+	updatedDate: timestamp("updated_date"),
+	deletedDate: timestamp("deleted_date"),
+	createdBy: integer("created_by").notNull().references(() => user.userId),
+	updatedBy: integer("updated_by").references(() => user.userId),
+	deletedBy: integer("deleted_by").references(() => user.userId),
+}, (table) => [
+	index("idx_transactions_customer").on(table.customerId),
+	index("idx_transactions_customer_date").on(table.customerId, table.transactionDate),
+	index("idx_transactions_created_by").on(table.createdBy),
+	index("idx_transactions_updated_by").on(table.updatedBy),
+	index("idx_transactions_deleted_by").on(table.deletedBy),
+]);
+
+export const transactionsItem = pgTable("transactions_item", {
+	transactionsItemId: serial("transactions_item_id").primaryKey().notNull(),
+	transactionsId: integer("transactions_id").notNull().references(() => transactions.transactionsId),
+	serviceId: integer("service_id").notNull().references(() => service.serviceId),
+	quantity: integer("quantity").notNull().default(1),
+	perfumeId: integer("perfume_id").references(() => perfume.perfumeId),
+});
+
+export const user = pgTable("user", {
+	userId: serial("user_id").primaryKey().notNull(),
+	username: varchar("username", { length: 100 }).notNull().unique(),
+	email: varchar("email", { length: 100 }).notNull().unique(),
+	passwordHash: varchar("password_hash", { length: 255 }).notNull(),
+	role: integer("role").notNull().$type<0 | 1 | 2>(), // 0 = admin, 1 = staff, 2 = customer
+	status: smallint("status").notNull().default(1).$type<0 | 1 | 2>(), // 0 = inactive, 1 = active, 2 = deleted
+	createdDate: timestamp("created_date").defaultNow().notNull(),
+	updatedDate: timestamp("updated_date"),
+	deletedDate: timestamp("deleted_date"),
+	createdBy: integer("created_by").notNull(),
+	updatedBy: integer("updated_by"),
+	deletedBy: integer("deleted_by"),
+}, (table) => [
+	index("idx_user_status").on(table.status),
+	index("idx_user_created_by").on(table.createdBy),
+	index("idx_user_updated_by").on(table.updatedBy),
+	index("idx_user_deleted_by").on(table.deletedBy),
 ]);
