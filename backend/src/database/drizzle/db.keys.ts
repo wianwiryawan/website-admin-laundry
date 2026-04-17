@@ -5,6 +5,7 @@ export interface DBConfig {
     DB_NAME: string;
     DB_USERNAME: string;
     DB_PASSWORD: string;
+    DB_SSL: string;
 }
 
 export const config: DBConfig = {
@@ -13,4 +14,5 @@ export const config: DBConfig = {
     DB_NAME: process.env.DB_NAME || 'my_db',
     DB_USERNAME: process.env.DB_USERNAME || 'my_user',
     DB_PASSWORD: process.env.DB_PASSWORD || 'my_password',
+    DB_SSL: process.env.DB_SSL || 'false',
 }

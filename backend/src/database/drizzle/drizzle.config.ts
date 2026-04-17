@@ -13,7 +13,7 @@ export default defineConfig({
     user: config.DB_USERNAME,
     database: config.DB_NAME,
     password: config.DB_PASSWORD,
-    ssl: false,
+    ssl: config.DB_SSL === "true",
   }
 });
 
