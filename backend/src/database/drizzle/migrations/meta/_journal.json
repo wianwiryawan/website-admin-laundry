@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1751463858908,
-      "tag": "0000_misty_la_nuit",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1753100686787,
-      "tag": "0001_absurd_moon_knight",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1772047569821,
-      "tag": "0002_third_omega_flight",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1772048326456,
-      "tag": "0003_early_valkyrie",
+      "when": 1776447695659,
+      "tag": "0000_real_energizer",
       "breakpoints": true
     }
   ]

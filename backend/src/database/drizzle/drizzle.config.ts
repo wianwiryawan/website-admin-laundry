@@ -5,7 +5,7 @@ const DRIZZLE_PATH="./src/database/drizzle";
 
 export default defineConfig({
   out: DRIZZLE_PATH + "/migrations",
-  schema: DRIZZLE_PATH + "/migrations/schema.ts",
+  schema: DRIZZLE_PATH + "/schema.ts",
   dialect: "postgresql",
   dbCredentials: {
     host: config.DB_HOST,
@@ -13,7 +13,7 @@ export default defineConfig({
     user: config.DB_USERNAME,
     database: config.DB_NAME,
     password: config.DB_PASSWORD,
-    ssl: false,
+    ssl: config.DB_SSL === "true",
   }
 });
 

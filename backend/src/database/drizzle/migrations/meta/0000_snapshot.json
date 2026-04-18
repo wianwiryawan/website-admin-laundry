@@ -1,15 +1,15 @@
 {
-  "id": "00000000-0000-0000-0000-000000000000",
-  "prevId": "",
+  "id": "324dc654-2f1e-4075-9ccb-1af62ee7de66",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.perfumes": {
-      "name": "perfumes",
-      "schema": "public",
+    "public.perfume": {
+      "name": "perfume",
+      "schema": "",
       "columns": {
-        "perfumes_id": {
-          "name": "perfumes_id",
+        "perfume_id": {
+          "name": "perfume_id",
           "type": "serial",
           "primaryKey": true,
           "notNull": true
@@ -22,7 +22,7 @@
         },
         "price": {
           "name": "price",
-          "type": "numeric",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
           "notNull": false
         },
@@ -36,78 +36,147 @@
           "name": "status",
           "type": "smallint",
           "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {},
-      "policies": {},
-      "isRLSEnabled": false
-    },
-    "public.customers": {
-      "name": "customers",
-      "schema": "public",
-      "columns": {
-        "customers_id": {
-          "name": "customers_id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": 1
         },
-        "customer_name": {
-          "name": "customer_name",
-          "type": "varchar(100)",
+        "created_date": {
+          "name": "created_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_date": {
+          "name": "updated_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "deleted_date": {
+          "name": "deleted_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
-        "number_of_transaction": {
-          "name": "number_of_transaction",
+        "updated_by": {
+          "name": "updated_by",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
-        "phone_number": {
-          "name": "phone_number",
-          "type": "varchar(25)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "wa_available": {
-          "name": "wa_available",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "last_transaction": {
-          "name": "last_transaction",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "address": {
-          "name": "address",
-          "type": "varchar(150)",
+        "deleted_by": {
+          "name": "deleted_by",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         }
       },
-      "indexes": {},
-      "foreignKeys": {},
+      "indexes": {
+        "idx_perfume_created_by": {
+          "name": "idx_perfume_created_by",
+          "columns": [
+            {
+              "expression": "created_by",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_perfume_updated_by": {
+          "name": "idx_perfume_updated_by",
+          "columns": [
+            {
+              "expression": "updated_by",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_perfume_deleted_by": {
+          "name": "idx_perfume_deleted_by",
+          "columns": [
+            {
+              "expression": "deleted_by",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "perfume_created_by_user_user_id_fk": {
+          "name": "perfume_created_by_user_user_id_fk",
+          "tableFrom": "perfume",
+          "tableTo": "user",
+          "columnsFrom": [
+            "created_by"
+          ],
+          "columnsTo": [
+            "user_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "perfume_updated_by_user_user_id_fk": {
+          "name": "perfume_updated_by_user_user_id_fk",
+          "tableFrom": "perfume",
+          "tableTo": "user",
+          "columnsFrom": [
+            "updated_by"
+          ],
+          "columnsTo": [
+            "user_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "perfume_deleted_by_user_user_id_fk": {
+          "name": "perfume_deleted_by_user_user_id_fk",
+          "tableFrom": "perfume",
+          "tableTo": "user",
+          "columnsFrom": [
+            "deleted_by"
+          ],
+          "columnsTo": [
+            "user_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraints": {},
       "policies": {},
+      "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.services": {
-      "name": "services",
-      "schema": "public",
+    "public.service": {
+      "name": "service",
+      "schema": "",
       "columns": {
-        "services_id": {
-          "name": "services_id",
+        "service_id": {
+          "name": "service_id",
           "type": "serial",
           "primaryKey": true,
           "notNull": true
@@ -118,9 +187,21 @@
           "primaryKey": false,
           "notNull": true
         },
+        "duration": {
+          "name": "duration",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
         "price": {
           "name": "price",
-          "type": "numeric",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(100)",
           "primaryKey": false,
           "notNull": false
         },
@@ -128,68 +209,144 @@
           "name": "status",
           "type": "smallint",
           "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {},
-      "policies": {},
-      "isRLSEnabled": false
-    },
-    "public.users": {
-      "name": "users",
-      "schema": "public",
-      "columns": {
-        "users_id": {
-          "name": "users_id",
-          "type": "integer",
-          "primaryKey": true,
           "notNull": true,
-          "identity": {
-            "type": "always",
-            "name": "public.users_id",
-            "increment": "1",
-            "minValue": "1",
-            "maxValue": "2147483647",
-            "startWith": "1",
-            "cache": "1",
-            "cycle": false,
-            "schema": "public"
-          }
+          "default": 1
         },
-        "username": {
-          "name": "username",
-          "type": "varchar(100)",
+        "created_date": {
+          "name": "created_date",
+          "type": "timestamp",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
         },
-        "status": {
-          "name": "status",
-          "type": "smallint",
+        "updated_date": {
+          "name": "updated_date",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": false
         },
-        "email": {
-          "name": "email",
-          "type": "varchar(100)",
+        "deleted_date": {
+          "name": "deleted_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
+        },
+        "updated_by": {
+          "name": "updated_by",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "deleted_by": {
+          "name": "deleted_by",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
         }
       },
-      "indexes": {},
-      "foreignKeys": {},
+      "indexes": {
+        "idx_service_created_by": {
+          "name": "idx_service_created_by",
+          "columns": [
+            {
+              "expression": "created_by",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_service_updated_by": {
+          "name": "idx_service_updated_by",
+          "columns": [
+            {
+              "expression": "updated_by",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_service_deleted_by": {
+          "name": "idx_service_deleted_by",
+          "columns": [
+            {
+              "expression": "deleted_by",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "service_created_by_user_user_id_fk": {
+          "name": "service_created_by_user_user_id_fk",
+          "tableFrom": "service",
+          "tableTo": "user",
+          "columnsFrom": [
+            "created_by"
+          ],
+          "columnsTo": [
+            "user_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "service_updated_by_user_user_id_fk": {
+          "name": "service_updated_by_user_user_id_fk",
+          "tableFrom": "service",
+          "tableTo": "user",
+          "columnsFrom": [
+            "updated_by"
+          ],
+          "columnsTo": [
+            "user_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "service_deleted_by_user_user_id_fk": {
+          "name": "service_deleted_by_user_user_id_fk",
+          "tableFrom": "service",
+          "tableTo": "user",
+          "columnsFrom": [
+            "deleted_by"
+          ],
+          "columnsTo": [
+            "user_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraints": {},
       "policies": {},
+      "checkConstraints": {},
       "isRLSEnabled": false
     },
     "public.transactions": {
       "name": "transactions",
-      "schema": "public",
+      "schema": "",
       "columns": {
         "transactions_id": {
           "name": "transactions_id",
@@ -199,75 +356,200 @@
         },
         "transaction_date": {
           "name": "transaction_date",
-          "type": "date",
+          "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": "now()"
         },
-        "customer_id": {
-          "name": "customer_id",
+        "user_id": {
+          "name": "user_id",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
-        },
-        "service_id": {
-          "name": "service_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "perfume_id": {
-          "name": "perfume_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "total_price": {
           "name": "total_price",
-          "type": "numeric",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
+        "created_date": {
+          "name": "created_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_date": {
+          "name": "updated_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "deleted_date": {
+          "name": "deleted_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_by": {
+          "name": "updated_by",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "deleted_by": {
+          "name": "deleted_by",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "idx_transactions_user": {
+          "name": "idx_transactions_user",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_transactions_user_date": {
+          "name": "idx_transactions_user_date",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "transaction_date",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_transactions_created_by": {
+          "name": "idx_transactions_created_by",
+          "columns": [
+            {
+              "expression": "created_by",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_transactions_updated_by": {
+          "name": "idx_transactions_updated_by",
+          "columns": [
+            {
+              "expression": "updated_by",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_transactions_deleted_by": {
+          "name": "idx_transactions_deleted_by",
+          "columns": [
+            {
+              "expression": "deleted_by",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
-        "transactions_customer_id_customers_customers_id_fk": {
-          "name": "transactions_customer_id_customers_customers_id_fk",
+        "transactions_user_id_user_user_id_fk": {
+          "name": "transactions_user_id_user_user_id_fk",
           "tableFrom": "transactions",
-          "tableTo": "customers",
-          "schemaTo": "public",
+          "tableTo": "user",
           "columnsFrom": [
-            "customer_id"
+            "user_id"
           ],
           "columnsTo": [
-            "customers_id"
+            "user_id"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "transactions_service_id_services_services_id_fk": {
-          "name": "transactions_service_id_services_services_id_fk",
+        "transactions_created_by_user_user_id_fk": {
+          "name": "transactions_created_by_user_user_id_fk",
           "tableFrom": "transactions",
-          "tableTo": "services",
-          "schemaTo": "public",
+          "tableTo": "user",
           "columnsFrom": [
-            "service_id"
+            "created_by"
           ],
           "columnsTo": [
-            "services_id"
+            "user_id"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "transactions_perfume_id_perfumes_perfumes_id_fk": {
-          "name": "transactions_perfume_id_perfumes_perfumes_id_fk",
+        "transactions_updated_by_user_user_id_fk": {
+          "name": "transactions_updated_by_user_user_id_fk",
           "tableFrom": "transactions",
-          "tableTo": "perfumes",
-          "schemaTo": "public",
+          "tableTo": "user",
           "columnsFrom": [
-            "perfume_id"
+            "updated_by"
           ],
           "columnsTo": [
-            "perfumes_id"
+            "user_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "transactions_deleted_by_user_user_id_fk": {
+          "name": "transactions_deleted_by_user_user_id_fk",
+          "tableFrom": "transactions",
+          "tableTo": "user",
+          "columnsFrom": [
+            "deleted_by"
+          ],
+          "columnsTo": [
+            "user_id"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
@@ -275,25 +557,465 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "checkConstraints": {},
       "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.transactions_item": {
+      "name": "transactions_item",
+      "schema": "",
+      "columns": {
+        "transactions_item_id": {
+          "name": "transactions_item_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "transactions_id": {
+          "name": "transactions_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "service_id": {
+          "name": "service_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quantity": {
+          "name": "quantity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
+        "perfume_id": {
+          "name": "perfume_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
+        "created_date": {
+          "name": "created_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_date": {
+          "name": "updated_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "deleted_date": {
+          "name": "deleted_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_by": {
+          "name": "updated_by",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "deleted_by": {
+          "name": "deleted_by",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "idx_transactions_item_transactions": {
+          "name": "idx_transactions_item_transactions",
+          "columns": [
+            {
+              "expression": "transactions_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_transactions_item_service": {
+          "name": "idx_transactions_item_service",
+          "columns": [
+            {
+              "expression": "service_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_transactions_item_perfume": {
+          "name": "idx_transactions_item_perfume",
+          "columns": [
+            {
+              "expression": "perfume_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_transactions_item_created_by": {
+          "name": "idx_transactions_item_created_by",
+          "columns": [
+            {
+              "expression": "created_by",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_transactions_item_updated_by": {
+          "name": "idx_transactions_item_updated_by",
+          "columns": [
+            {
+              "expression": "updated_by",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_transactions_item_deleted_by": {
+          "name": "idx_transactions_item_deleted_by",
+          "columns": [
+            {
+              "expression": "deleted_by",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "transactions_item_transactions_id_transactions_transactions_id_fk": {
+          "name": "transactions_item_transactions_id_transactions_transactions_id_fk",
+          "tableFrom": "transactions_item",
+          "tableTo": "transactions",
+          "columnsFrom": [
+            "transactions_id"
+          ],
+          "columnsTo": [
+            "transactions_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "transactions_item_service_id_service_service_id_fk": {
+          "name": "transactions_item_service_id_service_service_id_fk",
+          "tableFrom": "transactions_item",
+          "tableTo": "service",
+          "columnsFrom": [
+            "service_id"
+          ],
+          "columnsTo": [
+            "service_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "transactions_item_perfume_id_perfume_perfume_id_fk": {
+          "name": "transactions_item_perfume_id_perfume_perfume_id_fk",
+          "tableFrom": "transactions_item",
+          "tableTo": "perfume",
+          "columnsFrom": [
+            "perfume_id"
+          ],
+          "columnsTo": [
+            "perfume_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "transactions_item_created_by_user_user_id_fk": {
+          "name": "transactions_item_created_by_user_user_id_fk",
+          "tableFrom": "transactions_item",
+          "tableTo": "user",
+          "columnsFrom": [
+            "created_by"
+          ],
+          "columnsTo": [
+            "user_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "transactions_item_updated_by_user_user_id_fk": {
+          "name": "transactions_item_updated_by_user_user_id_fk",
+          "tableFrom": "transactions_item",
+          "tableTo": "user",
+          "columnsFrom": [
+            "updated_by"
+          ],
+          "columnsTo": [
+            "user_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "transactions_item_deleted_by_user_user_id_fk": {
+          "name": "transactions_item_deleted_by_user_user_id_fk",
+          "tableFrom": "transactions_item",
+          "tableTo": "user",
+          "columnsFrom": [
+            "deleted_by"
+          ],
+          "columnsTo": [
+            "user_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.user": {
+      "name": "user",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "username": {
+          "name": "username",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "phone_number": {
+          "name": "phone_number",
+          "type": "varchar(25)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "address": {
+          "name": "address",
+          "type": "varchar(150)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "wa_available": {
+          "name": "wa_available",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password_hash": {
+          "name": "password_hash",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
+        "created_date": {
+          "name": "created_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_date": {
+          "name": "updated_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "deleted_date": {
+          "name": "deleted_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_by": {
+          "name": "created_by",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_by": {
+          "name": "updated_by",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "deleted_by": {
+          "name": "deleted_by",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "idx_user_status": {
+          "name": "idx_user_status",
+          "columns": [
+            {
+              "expression": "status",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_user_created_by": {
+          "name": "idx_user_created_by",
+          "columns": [
+            {
+              "expression": "created_by",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_user_updated_by": {
+          "name": "idx_user_updated_by",
+          "columns": [
+            {
+              "expression": "updated_by",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "idx_user_deleted_by": {
+          "name": "idx_user_deleted_by",
+          "columns": [
+            {
+              "expression": "deleted_by",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "user_username_unique": {
+          "name": "user_username_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "username"
+          ]
+        },
+        "user_email_unique": {
+          "name": "user_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
       "isRLSEnabled": false
     }
   },
   "enums": {},
-  "schemas": {
-    "public": "public"
-  },
+  "schemas": {},
   "sequences": {},
   "roles": {},
   "policies": {},
   "views": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
-  },
-  "internal": {
     "tables": {}
   }
 }
