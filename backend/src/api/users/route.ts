@@ -6,10 +6,19 @@ const router = Router();
 // List all users
 router.get('/', usersController.getAllUsersHandler);
 
-// Add new user
+// Add new user by admin
 router.post('/add', async (req, res, next) => {
     try {
-        await usersController.addUserHandler(req, res);
+        await usersController.adminAddUserHandler(req, res);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// Self register
+router.post('/register/add', async (req, res, next) => {
+    try {
+        await usersController.userSelfRegisterHandler(req, res);
     } catch (error) {
         next(error);
     }
@@ -18,16 +27,16 @@ router.post('/add', async (req, res, next) => {
 // Get user by id
 router.get('/:id', async (req, res, next) => {
     try {
-        await usersController.getUserById(req, res);
+        await usersController.getUserByIdHandler(req, res);
     } catch (error) {
         next(error);
     }
 });
 
 // Edit user by id
-router.put('/edit/:id', async (req, res, next) => {
+router.put('/update/:id', async (req, res, next) => {
     try {
-        await usersController.editUserById(req, res);
+        await usersController.updateUserByIdHandler(req, res);
     } catch (error) {
         next(error);
     }
@@ -36,7 +45,7 @@ router.put('/edit/:id', async (req, res, next) => {
 // Soft delete user by id
 router.put('/delete/:id', async (req, res, next) => {
     try {
-        await usersController.softDeleteUserById(req, res);
+        await usersController.softDeleteUserByIdHandler(req, res);
     } catch (error) {
         next(error);
     }
