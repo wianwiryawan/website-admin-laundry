@@ -4,7 +4,7 @@ import { ZodError } from "zod";
 
 // Controllers: Handle HTTP request/response only.
 
-export const getAllPerfumesHandler = async (req: Request, res: Response) => {
+export const getAllPerfumesHandler = async (res: Response) => {
     const result = await perfumeService.getAllPerfumes();
     res.json(result);
 };
@@ -27,7 +27,8 @@ export const getPerfumeByIdHandler = async (req: Request, res: Response) => {
 
 export const addPerfumeHandler = async (req: Request, res: Response) => {
     try {
-        const result = await perfumeService.addPerfume(req.body);
+        const adminId = req.body.id;
+        const result = await perfumeService.addPerfume(req.body, adminId);
         res.status(201).json(result);
     } catch (error) {
         if (error instanceof ZodError) {
@@ -44,14 +45,14 @@ export const addPerfumeHandler = async (req: Request, res: Response) => {
     }
 };
 
-export const updatePerfumeByIdHandler = async (req: Request, res: Response) => {
+export const updatePerfumeHandler = async (req: Request, res: Response) => {
     try {
-        const id = Number(req.params.id);
-        const result = await perfumeService.updatePerfumeById(id, req.body);
+        const adminId = Number(req.params.id);
+        const result = await perfumeService.updatePerfume(req.body, adminId);
         res.json(result);
     } catch (error) {
         if (error instanceof ZodError) {
-            // validation failed
+            // validation failedid,
             console.error(error);
             return res.status(400).json({
                 error: 'Validation Error',
@@ -64,10 +65,10 @@ export const updatePerfumeByIdHandler = async (req: Request, res: Response) => {
     }
 };
 
-export const softDeletePerfumeByIdHandler = async (req: Request, res: Response) => {
+export const deletePerfumeHandler = async (req: Request, res: Response) => {
     try {
-        const id = Number(req.params.id);
-        const result = await perfumeService.softDeletePerfumeById(id, req.body);
+        const adminId = Number(req.params.id);
+        const result = await perfumeService.deletePerfume(req.body, adminId);
         res.json(result);
     } catch (error) {
         if (error instanceof ZodError) {

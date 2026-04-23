@@ -27,7 +27,7 @@ router.get('/:id', async (req, res, next) => {
 // Edit perfume by id
 router.put('/edit/:id', async (req, res, next) => {
     try {
-        await perfumeController.updatePerfumeByIdHandler(req, res);
+        await perfumeController.updatePerfumeHandler(req, res);
     } catch (error) {
         next(error);
     }
@@ -36,7 +36,7 @@ router.put('/edit/:id', async (req, res, next) => {
 // Soft delete perfume by id
 router.put('/delete/:id', async (req, res, next) => {
     try {
-        await perfumeController.softDeletePerfumeByIdHandler(req, res);
+        await perfumeController.deletePerfumeHandler(req, res);
     } catch (error) {
         next(error);
     }
