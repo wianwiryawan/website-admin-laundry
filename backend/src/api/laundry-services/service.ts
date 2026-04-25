@@ -1,74 +1,108 @@
 import { eq } from "drizzle-orm";
-import { db } from "../../database/drizzle/db";
-import { laundryServicesInData } from '../../database/drizzle/migrations/schema';
+import { db } from "@/database/drizzle/db";
+import { service } from '@/database/drizzle/schema';
 import { createLaundryServiceValidation, updateLaundryServiceValidation } from './validation';
 
 // Services: Handle business logic and talk to the database.
 
+const now = () => new Date();
+
 export const getAllLaundryServices = async () => {
-    return db.select().from(laundryServicesInData);
+    return db.select().from(service);
 };
 
 export const getLaundryById = async (serviceId: number) => {
-    return db.select().from(laundryServicesInData).where(
-        eq(laundryServicesInData.laundry_services_id, serviceId)
+    return db.select().from(service).where(
+        eq(service.serviceId, serviceId)
     );
 };
 
-export const addLaundryService = async (laundryServicesData: unknown) => {
-    const result = createLaundryServiceValidation.safeParse(laundryServicesData);
+export const addLaundryService = async (requestBody: unknown, adminId: number) => {
+    const result = createLaundryServiceValidation.safeParse(requestBody);
     if(!result.success){
-        // Handle validation error (throw, return, or log)
-        // throw new Error(`Validation failed: ${result.error}`);
         throw result.error;
     }
 
     // Destructure and pass the validated data to Drizzle insert
     const validatedData = result.data;
 
+    const data = {
+        serviceName: validatedData.serviceName,
+        duration: validatedData.duration,
+        price: validatedData.price,
+        description: validatedData.description,
+        status: validatedData.status as 0 | 1 | 2,
+        createdBy: adminId
+    };
+
     // Use validated data
     const inserted = await db
-        .insert(laundryServicesInData)
-        .values(validatedData)
-        .returning()
+        .insert(service)
+        .values(data)
+        .returning();
+
     return {
-        message: "User created successfully",
-        data: inserted[0]
+        data: inserted[0].serviceName,
+        message: "Laundry service created successfully"
     };
 };
 
-export const updateLaundryServiceById = async (laundryServiceId: number, laundryServicesData: unknown) => {
-    const result = updateLaundryServiceValidation.safeParse(laundryServicesData);
+export const updateLaundryServiceById = async (requestBody: unknown, adminId: number) => {
+    const result = updateLaundryServiceValidation.safeParse(requestBody);
     if(!result.success){
         throw result.error;
     }
 
-    const validatedData = {
-        ...result.data,
-        updated_date: new Date().toISOString(),
+    const validatedData = result.data;
+
+    const data = {
+        serviceName: validatedData.serviceName,
+        duration: validatedData.duration,
+        price: validatedData.price,
+        description: validatedData.description,
+        status: validatedData.status as 0 | 1 | 2,
+        updatedBy: adminId,
+        updatedDate: now(),
     };
 
-    return db.update(laundryServicesInData)
-        .set(validatedData)
+    const updated = await db
+        .update(service)
+        .set(data)
         .where(
-            eq(laundryServicesInData.laundry_services_id, laundryServiceId)
-        );
+            eq(service.serviceId, validatedData.serviceId)
+        )
+        .returning();
+
+    return {
+        data: updated[0].serviceName,
+        message: "Laundry service updated successfully"
+    }
 };
 
-export const softDeleteLaundryServiceById = async (laundryServiceId: number, laundryServiceData: unknown) => {
-    const result = updateLaundryServiceValidation.safeParse(laundryServiceData);
+export const deleteLaundryService = async (requestBody: unknown, adminId: number) => {
+    const result = updateLaundryServiceValidation.safeParse(requestBody);
     if (!result.success) {
         throw result.error;
     }
 
-    const validatedData = {
-        ...result.data,
-        updated_date: new Date().toISOString(),
+    const validatedData = result.data;
+
+    const data = {
+        status: 2 as 0 | 1 | 2,
+        deletedDate: now(),
+        deletedBy: adminId,
     };
 
-    return db.update(laundryServicesInData)
-        .set(validatedData)
+    const deleted = await db
+        .update(service)
+        .set(data)
         .where(
-            eq(laundryServicesInData.laundry_services_id, laundryServiceId)
-    );
+            eq(service.serviceId, validatedData.serviceId)
+        )
+        .returning();
+
+    return {
+        data: deleted[0].serviceName,
+        message: "Laundry service deleted successfully"
+    }
 };
