@@ -4,7 +4,13 @@ import * as laundryServiceController from './controller';
 const router = Router();
 
 // List all laundry service
-router.get('/', laundryServiceController.getAllLaundryServicesHandler);
+router.get('/', async (req, res, next) => {
+    try {
+        laundryServiceController.getAllLaundryServicesHandler(res);
+    } catch (error) {
+        next(error);
+    }
+});
 
 // Add new laundry service
 router.post('/add', async (req, res, next) => {
@@ -25,7 +31,7 @@ router.get('/:id', async (req, res, next) => {
 });
 
 // Edit existing laundry service by id
-router.get('/edit/:id', async (req, res, next) => {
+router.get('/edit', async (req, res, next) => {
     try {
         await laundryServiceController.updateLaundryServiceHandler(req, res);
     } catch (error) {
@@ -34,9 +40,9 @@ router.get('/edit/:id', async (req, res, next) => {
 })
 
 // Soft delete existing laundry service by id
-router.put('/delete/:id', async (req, res, next) => {
+router.put('/delete', async (req, res, next) => {
     try {
-        await laundryServiceController.softDeleteLaundryServiceHandler(req, res);
+        await laundryServiceController.deleteLaundryServiceHandler(req, res);
     } catch (error) {
         next(error);
     }
