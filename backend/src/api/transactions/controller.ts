@@ -11,7 +11,7 @@ export const getAllTransactionsHandler = async (req: Request, res: Response) => 
 
 export const getTransactionById = async (req: Request, res: Response) => {
     try {
-        const id = Number(req.params.id);
+        const id = req.body.id;
         const result = await transactionsService.getTransactionById(id);
         if (result.length == 0) {
             return res.status(400).json({
@@ -26,27 +26,31 @@ export const getTransactionById = async (req: Request, res: Response) => {
 
 export const addTransactionHandler = async (req: Request, res: Response) => {
     try {
-        const result = await transactionsService.addTransaction(req.body);
+        const requestBody = req.body;
+        const adminId = requestBody.adminId;
+        const result = await transactionsService.addTransaction(requestBody, adminId);
         res.status(201).json(result);
     } catch (error) {
         handleError(res, error);
     }
 };
 
-export const updateTransactionByIdHandler = async (req: Request, res: Response) => {
+export const updateTransactionHandler = async (req: Request, res: Response) => {
     try {
-        const id = Number(req.params.id);
-        const result = await transactionsService.updateTransactionById(id, req.body);
+        const requestBody = req.body;
+        const adminId = Number(requestBody.adminId);
+        const result = await transactionsService.updateTransaction(requestBody, adminId);
         res.json(result);
     } catch (error) {
         handleError(res, error);
     }
 };
 
-export const softDeleteTransactionByIdHandler = async (req: Request, res: Response) => {
+export const softDeleteTransactionHandler = async (req: Request, res: Response) => {
     try {
-        const id = Number(req.params.id);
-        const result = await transactionsService.softDeletePerfumeById(id, req.body);
+        const requestBody = req.body;
+        const adminId = Number(req.body.adminId);
+        const result = await transactionsService.deleteTransaction(requestBody, adminId);
         res.json(result);
     } catch (error) {
         handleError(res, error);
