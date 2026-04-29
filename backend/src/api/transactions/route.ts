@@ -23,17 +23,17 @@ router.get('/:id', async (req, res, next) => {
     }
 });
 
-router.put('/edit/:id', async (req, res, next) => {
+router.put('/edit', async (req, res, next) => {
     try {
-        await transactionController.updateTransactionByIdHandler(req, res);
+        await transactionController.updateTransactionHandler(req, res);
     } catch (error) {
         next(error);
     }
 });
 
-router.put('/delete/:id', async (req, res, next) => {
+router.put('/delete', async (req, res, next) => {
     try {
-        await transactionController.softDeleteTransactionByIdHandler(req, res);
+        await transactionController.softDeleteTransactionHandler(req, res);
     } catch (error) {
         next(error);
     }
