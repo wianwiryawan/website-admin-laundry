@@ -1,84 +1,146 @@
-import { db } from "../../database/drizzle/db";
-import { transactionsInData } from "../../database/drizzle/migrations/schema";
-import { createTransactionValidation, updateTransactionValidation } from "./validation";
-import { eq } from "drizzle-orm";
+import { db } from "@/database/drizzle/db";
+import { transactions, transactionsItem } from "@/database/drizzle/schema";
+import { addTransactionSchema, updateTransactionSchema } from "./validation";
+import { eq, and } from "drizzle-orm";
 
 // Services: Handle business logic and talk to the database.
+const now = () => new Date();
 
 export const getAllTransaction = async () => {
-    return db.select().from(transactionsInData);
+    return db.select().from(transactions);
 };
 
 export const getTransactionById = async (transactionId: number) => {
-    return db.select().from(transactionsInData).where(
-        eq(transactionsInData.transactions_id, transactionId)
+    return db.select().from(transactions).where(
+        eq(transactions.transactionsId, transactionId)
     );
 };
 
-export const addTransaction = async (transactionsData: unknown) => {
-    const result = createTransactionValidation.safeParse(transactionsData);
-    if(!result.success){
-        // Handle validation error (throw, return, or log)
-        // throw new Error(`Validation failed: ${result.error}`);
-        throw result.error;
-    }
+export const addTransaction = async (requestBody: unknown, adminId: number) => {
+    const result = addTransactionSchema.safeParse(requestBody);
 
-    const validatedData = {
-        ...result.data,
-        transaction_date: result.data.transaction_date instanceof Date
-        ? result.data.transaction_date.toISOString()
-        : result.data.transaction_date
+    if (!result.success) {
+        throw result.error;
+    };
+
+    const validatedData = result.data;
+
+    const data = {
+        userId: validatedData.userId,
+        totalPrice: validatedData.totalPrice,
+        status: validatedData.status as 0 | 1 | 2,
+        createdBy: adminId,
     };
     
     // Use validated data
-    const inserted = await db
-        .insert(transactionsInData)
-        .values(validatedData)
-        .returning();
-    return {
-        message: "User created successfully",
-        data: inserted[0]
-    };
+    return await db.transaction(async (handler) => {
+        const [transaction] = await handler
+            .insert(transactions)
+            .values(data)
+            .returning();
+        
+        const transactionId = transaction.transactionsId;
+
+        const dataItem = validatedData.items.map((item) => ({
+            transactionsId: transactionId,
+            serviceId: item.serviceId,
+            quantity: item.quantity,
+            perfumeId: item.perfumeId ?? null,
+            status: 1 as 0 | 1 | 2,
+            createdBy: adminId,
+        }));
+
+        const transactionitem = await handler
+            .insert(transactionsItem)
+            .values(dataItem);
+        
+        return {
+            transaction,
+            transactionitem,
+            message: "Transaction updated successfully"
+        };
+    });
 };
 
-export const updateTransactionById = async (transactionsId: number, transactionsData: unknown) => {
-    const result = updateTransactionValidation.safeParse(transactionsData);
+
+export const updateTransaction = async (requestBody: unknown, adminId: number) => {
+    const result = updateTransactionSchema.safeParse(requestBody);
     if (!result.success) {
         throw result.error;
-    }
-
-    const validatedData = {
-        ...result.data,
-        transaction_date: result.data.transaction_date instanceof Date
-        ? result.data.transaction_date.toISOString()
-        : result.data.transaction_date,
-        updated_date: new Date().toISOString()
     };
 
-    return db.update(transactionsInData)
-        .set(validatedData)
-        .where(
-            eq(transactionsInData.transactions_id, transactionsId)
+    const validatedData = result.data;
+
+    const data = {
+        transactionDate: validatedData.transactionDate,
+        userId: validatedData.userId,
+        totalPrice: validatedData.totalPrice,
+        status: validatedData.status as 0 | 1 | 2,
+        updatedDate: now(),
+        updatedBy: adminId,
+    }
+
+    return await db.transaction(async (handler) => {
+        const transaction = await handler
+            .update(transactions)
+            .set(data)
+            .where(
+                eq(transactions.transactionsId, validatedData.transactionsId)
+            )
+            .returning();
+
+        const transactionItem = await Promise.all(
+            validatedData.items.map((item) => handler
+                .update(transactionsItem)
+                .set({
+                    serviceId: item.serviceId,
+                    quantity: item.quantity,
+                    perfumeId: item.perfumeId ?? null,
+                    updatedDate: now(),
+                    updatedBy: adminId,
+                })
+                .where(
+                    and(
+                        eq(transactionsItem.transactionsItemId, item.transactionsItemId),
+                        eq(transactionsItem.transactionsId, validatedData.transactionsId)
+                    )
+                )
+            )
         );
+
+        return {
+            transaction,
+            transactionItem,
+            message: "Transaction updated successfully"
+        };
+    });
 }
 
-export const softDeletePerfumeById = async (transactionId: number, transactionData: unknown) => {
-    const result = updateTransactionValidation.safeParse(transactionData);
+export const deleteTransaction = async (transactionData: unknown, adminId: number) => {
+    const result = updateTransactionSchema.safeParse(transactionData);
     if (!result.success) {
         throw result.error;
-    }
-
-    let validatedData = {
-        ...result.data,
-        transaction_date: result.data.transaction_date instanceof Date
-        ? result.data.transaction_date.toISOString()
-        : result.data.transaction_date,
-        updated_date: new Date().toISOString() // Add current timestamp for updated_date
     };
 
-    return db.update(transactionsInData)
-        .set(validatedData)
-        .where(
-            eq(transactionsInData.transactions_id, transactionId)
-        ).returning();
+    const validatedData = result.data;
+
+    const data = {
+        status: 2 as 0 | 1 | 2,
+        deletedDate: now(),
+        deletedBy: adminId,
+    };
+
+    return await db.transaction(async (handler) => {
+        const deleted = handler.update(transactions)
+            .set(data)
+            .where(
+                eq(transactions.transactionsId, validatedData.transactionsId)
+            )
+            .returning(); 
+        
+        return {
+            data: deleted,
+            message: "Transaction deleted successfully"
+        }
+    });
 }
