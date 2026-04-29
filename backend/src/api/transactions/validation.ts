@@ -1,26 +1,42 @@
-import { z } from "zod";
+import { z } from 'zod';
 import { createInsertSchema, createUpdateSchema } from "drizzle-zod";
-import { transactionsInData } from "../../database/drizzle/migrations/schema";
+import { transactions } from "@/database/drizzle/schema";
 
 // Validation: Handle validation logic.
 
-const insertTransactionSchema = createInsertSchema(transactionsInData);
-const updateTransactionSchema = createUpdateSchema(transactionsInData);
+const insertSchema = createInsertSchema(transactions);
+const updateSchema = createUpdateSchema(transactions);
 
-export const createTransactionValidation = insertTransactionSchema.extend({
-    transaction_date: z.preprocess(
-    (val) => {
-        if (typeof val === "string" || val instanceof Date) return new Date(val);
-    },
-        z.date(),
+export const addTransactionSchema = insertSchema.extend({
+    totalPrice: z.string()
+        .regex(/^\d+(\.\d{1,2})?$/, "Must be a valid price with up to 2 decimals")
+        .refine((val) => {
+            const num = Number(val);
+            return num >= 0 && num <= 99999999.99;
+        }, "Value out of range"),
+    items: z.array(
+        z.object({
+        serviceId: z.number(),
+        quantity: z.number().int().min(1),
+        perfumeId: z.number().optional(),
+        })
     ),
 });
 
-export const updateTransactionValidation = updateTransactionSchema.extend({
-    transaction_date: z.preprocess(
-    (val) => {
-        if (typeof val === "string" || val instanceof Date) return new Date(val);
-    },
-        z.date(),
+export const updateTransactionSchema = updateSchema.extend({
+    transactionsId: z.number(),
+    totalPrice: z.string()
+        .regex(/^\d+(\.\d{1,2})?$/, "Must be a valid price with up to 2 decimals")
+        .refine((val) => {
+            const num = Number(val);
+            return num >= 0 && num <= 99999999.99;
+        }, "Value out of range"),
+    items: z.array(
+        z.object({
+            transactionsItemId: z.number(),
+            serviceId: z.number(),
+            quantity: z.number().int().min(1),
+            perfumeId: z.number().optional(),
+        })
     ),
-})
+});
