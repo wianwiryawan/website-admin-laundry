@@ -13,15 +13,17 @@ DB_PORT=string // Port where your db listen to
 DB_USERNAME=string // Your db username
 DB_PASSWORD=string // Your db password
 NODE_PORT=int // Port where you node listen to
+
+JWT_SECRET=node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 ```
 
 Run `dotenvx encrypt` command on your terminal to encrypt your .env
 
 Make sure you have postgre installed, then run this code `dotenvx run -- npx drizzle-kit migrate --config=./src/database/drizzle/drizzle.config.ts` to add new schema, table, and column into your new database
 
-For dev, run the project with `dotenvx run -- npx nodemon --watch . --ext ts,js --exec tsx app.ts`
+For dev, run the project with `npm run dev`
 
-For prod, run the project with `dotenvx run -- node app.js`
+For prod, run the project with `npm run prod`
 
 Known issue:
 
