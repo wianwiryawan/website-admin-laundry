@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import * as transactionsService from './service';
-import { ZodError } from "zod";
+import { handleError } from '@/api/api.global';
 
 // Controllers: Handle HTTP request/response only.
 
@@ -56,17 +56,3 @@ export const softDeleteTransactionHandler = async (req: Request, res: Response) 
         handleError(res, error);
     }
 };
-
-function handleError(res: Response, error: any) {
-    if (error instanceof ZodError) {
-            // validation failed
-            console.error(error);
-            return res.status(400).json({
-                error: 'Validation Error',
-                details: error,
-            });
-        };
-        // any other error
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error'});
-}

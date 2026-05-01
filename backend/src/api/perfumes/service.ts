@@ -2,9 +2,9 @@ import { eq } from "drizzle-orm";
 import { db } from "@/database/drizzle/db";
 import { perfume } from '@/database/drizzle/schema';
 import { createPerfumeValidation, updatePerfumeValidation } from "./validation";
+import { now } from '@/api/api.global';
 
 // Services: Handle business logic and talk to the database.
-const now = () => new Date();
 
 export const getAllPerfumes = async () => {
     return db.select().from(perfume);
@@ -41,7 +41,7 @@ export const addPerfume = async (requestBody: unknown, adminId: number) => {
         inserted,
         message: "User created successfully"
     };
-}
+};
 
 export const updatePerfume = async (requestBody: unknown, adminId: number) => {
     const result = updatePerfumeValidation.safeParse(requestBody);
@@ -70,22 +70,21 @@ export const updatePerfume = async (requestBody: unknown, adminId: number) => {
     return {
         updated,
         message: "Data successfully updated"
-    }
-}
+    };
+};
 
 export const deletePerfume = async (requestBody: unknown, adminId: number) => {
     const result = updatePerfumeValidation.safeParse(requestBody);
-
     if (!result.success) {
         throw result.error;
-    }
+    };
 
     const validatedData = result.data;
 
     const data = {
         status: 2 as 0 | 1 | 2,
         updatedBy: adminId,
-    }
+    };
 
     const deleted = await db
         .update(perfume)
@@ -97,5 +96,5 @@ export const deletePerfume = async (requestBody: unknown, adminId: number) => {
     return {
         deleted,
         message: "Data successfully deleted"
-    }
-}
+    };
+};

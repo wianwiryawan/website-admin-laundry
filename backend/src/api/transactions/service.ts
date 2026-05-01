@@ -2,9 +2,9 @@ import { db } from "@/database/drizzle/db";
 import { transactions, transactionsItem } from "@/database/drizzle/schema";
 import { addTransactionSchema, updateTransactionSchema } from "./validation";
 import { eq, and } from "drizzle-orm";
+import { now } from '@/api/api.global';
 
 // Services: Handle business logic and talk to the database.
-const now = () => new Date();
 
 export const getAllTransaction = async () => {
     return db.select().from(transactions);

@@ -4,10 +4,9 @@ import { adminCreateUserSchema, updateUserSchema, updatePasswordSchema, deleteUs
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcrypt';
 import { Json } from 'drizzle-zod';
+import { now } from '@/api/api.global';
 
 // Services: Handle business logic and talk to the database.
-
-const now = () => new Date();
 
 export const getAllUsers = async () => {
     return db.select().from(user);

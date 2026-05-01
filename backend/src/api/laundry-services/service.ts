@@ -2,10 +2,9 @@ import { eq } from "drizzle-orm";
 import { db } from "@/database/drizzle/db";
 import { service } from '@/database/drizzle/schema';
 import { createLaundryServiceValidation, updateLaundryServiceValidation } from './validation';
+import { now } from '@/api/api.global';
 
 // Services: Handle business logic and talk to the database.
-
-const now = () => new Date();
 
 export const getAllLaundryServices = async () => {
     return db.select().from(service);
@@ -19,9 +18,10 @@ export const getLaundryById = async (serviceId: number) => {
 
 export const addLaundryService = async (requestBody: unknown, adminId: number) => {
     const result = createLaundryServiceValidation.safeParse(requestBody);
+    
     if(!result.success){
         throw result.error;
-    }
+    };
 
     // Destructure and pass the validated data to Drizzle insert
     const validatedData = result.data;
@@ -49,9 +49,10 @@ export const addLaundryService = async (requestBody: unknown, adminId: number) =
 
 export const updateLaundryServiceById = async (requestBody: unknown, adminId: number) => {
     const result = updateLaundryServiceValidation.safeParse(requestBody);
+    
     if(!result.success){
         throw result.error;
-    }
+    };
 
     const validatedData = result.data;
 
@@ -76,7 +77,7 @@ export const updateLaundryServiceById = async (requestBody: unknown, adminId: nu
     return {
         data: updated[0].serviceName,
         message: "Laundry service updated successfully"
-    }
+    };
 };
 
 export const deleteLaundryService = async (requestBody: unknown, adminId: number) => {
@@ -104,5 +105,5 @@ export const deleteLaundryService = async (requestBody: unknown, adminId: number
     return {
         data: deleted[0].serviceName,
         message: "Laundry service deleted successfully"
-    }
+    };
 };
