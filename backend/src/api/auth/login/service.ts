@@ -1,9 +1,13 @@
+import { eq } from "drizzle-orm";
+import { db } from "@/database/drizzle/db";
+import { user } from "@/database/drizzle/schema";
 import { loginValidation } from './validation';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 // Services: Handle business logic and talk to the database.
 
-export const login = async (data: any) => {
+export const login = async (data: unknown) => {
     // validate data with zod
     const result = loginValidation.safeParse(data);
     
@@ -18,47 +22,60 @@ export const login = async (data: any) => {
         throw new Error("Invalid email or password");
     }
 
-    const isValid = await checkPassword(result.data.password, user.passwordHash); // Implement this function to compare passwords
+    const userData = user[0];
+
+    const isValid = await checkPassword(result.data.password, userData.passwordHash); // Implement this function to compare passwords
 
     if (!isValid) {
         throw new Error("Invalid email or password");
     }
+    
+    const JWT_SECRET = process.env.JWT_SECRET;
+    if (!JWT_SECRET) {
+        throw new Error("Missing JWT_SECRET in environment variables");
+    }
+    
+    const token = jwt.sign(
+        { userId: userData.userId, role: userData.role },
+        JWT_SECRET,
+        { expiresIn: '7d' }
+    )
 
-    // return user data or token if successful, or throw an error if not
-    // return {
-    //     message: "Login successful",
-    //     user: {
-    //         id: 1,
-    //         username: data.username,
-    //         // other user info
-    //     },
-    //     token: "fake-jwt-token"
-    // };
+    // Return the zod-validated shape, and never return passwordHash
     return {
         message: "Login successful",
-        data: data,
-    }
+        token,
+        data: {
+            userId: userData.userId,
+            email: userData.email,
+            role: userData.role,
+        },
+    };
 };
 
-// Mock function to find user by email (replace with actual database query)
 const findUserByEmail = async (email: string) => {
-    // Simulate database lookup
-    if (email === "wianwiryawan@gmail.com") {
-        return {
-            id: 1,
-            email: email,
-            role: "admin",
-            username: "Wiyan Wiryawan",
-            passwordHash: "passwordHashed123", // Replace with actual hashed password
-        };
-    } else {
-        throw new Error("User not found");
-    }
+    const userData = await db
+        .select({
+            userId: user.userId,
+            email: user.email,
+            role: user.role,
+            username: user.username,
+            passwordHash: user.passwordHash,
+        })
+        .from(user)
+        .where(
+            eq(user.email, email)
+        );
+
+    // Select always return an array even when no rows match
+    if (userData.length === 0) {
+        return null;
+    };
+
+    return userData;
 };
 
-// Mock function to check password (replace with actual password hashing and comparison)
 const checkPassword = async (password: string, passwordHash: string) => {
-    // Simulate password check (in real implementation, use bcrypt or similar)
-    const isValid = await bcrypt.compare(password, passwordHash); // Replace with actual password comparison logic
+    const isValid = await bcrypt.compare(password, passwordHash);
     return isValid;
 };
