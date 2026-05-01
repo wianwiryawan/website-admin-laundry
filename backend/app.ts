@@ -1,9 +1,7 @@
 import express, { Request, Response, Application } from 'express';
 import cors from 'cors';
 import authLoginRoutes from './src/api/auth/login/route';
-// import authRegisterRoutes from './src/api/auth/register/route';
 import userRoutes from './src/api/users/route';
-import customerRoutes from './src/api/customers/route';
 import laundryRoutes from './src/api/laundry-services/route';
 import perfumesRoutes from './src/api/perfumes/route';
 import transactionRoutes from './src/api/transactions/route';
@@ -28,14 +26,8 @@ app.get('/api', (req: Request, res: Response) => {
 // Mount the auth login routes
 app.use('/api/auth/login', authLoginRoutes);
 
-// Mount the auth register routes
-// app.use('/api/auth/register', authRegisterRoutes); // unused for now, can be implemented later when needed
-
 // Mount the users routes
 app.use('/api/users', userRoutes);
-
-// Mount the customer routes
-app.use('/api/customers', customerRoutes);
 
 // Mount the laundry routes
 app.use('/api/laundry-services', laundryRoutes);
