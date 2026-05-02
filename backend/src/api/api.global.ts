@@ -2,6 +2,7 @@ import { Response } from "express";
 import { ZodError } from "zod";
 
 export function handleError(res: Response, error: any) {
+    console.log("Response error: \n"+error);
     if (error instanceof ZodError) {
             // validation failed
             return res.status(400).json({
