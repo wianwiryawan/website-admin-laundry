@@ -3,6 +3,7 @@ import { transactions, transactionsItem } from "@/database/drizzle/schema";
 import { addTransactionSchema, updateTransactionSchema } from "./validation";
 import { eq, and } from "drizzle-orm";
 import { now } from '@/api/api.global';
+import { AppError } from "@/api/api.global";
 
 // Services: Handle business logic and talk to the database.
 
@@ -17,13 +18,14 @@ export const getTransactionById = async (transactionId: number) => {
 };
 
 export const addTransaction = async (requestBody: unknown, adminId: number) => {
-    const result = addTransactionSchema.safeParse(requestBody);
+    const parsed = addTransactionSchema.safeParse(requestBody);
 
-    if (!result.success) {
-        throw result.error;
+    if (!parsed.success) {
+        console.log(parsed.error.message);
+        throw new AppError(400, "Invalid request param");
     };
 
-    const validatedData = result.data;
+    const validatedData = parsed.data;
 
     const data = {
         userId: validatedData.userId,
@@ -64,12 +66,13 @@ export const addTransaction = async (requestBody: unknown, adminId: number) => {
 
 
 export const updateTransaction = async (requestBody: unknown, adminId: number) => {
-    const result = updateTransactionSchema.safeParse(requestBody);
-    if (!result.success) {
-        throw result.error;
+    const parsed = updateTransactionSchema.safeParse(requestBody);
+    if (!parsed.success) {
+        console.log(parsed.error.message);
+        throw new AppError(400, "Invalid request param");
     };
 
-    const validatedData = result.data;
+    const validatedData = parsed.data;
 
     const data = {
         transactionDate: validatedData.transactionDate,
@@ -117,12 +120,13 @@ export const updateTransaction = async (requestBody: unknown, adminId: number) =
 }
 
 export const deleteTransaction = async (transactionData: unknown, adminId: number) => {
-    const result = updateTransactionSchema.safeParse(transactionData);
-    if (!result.success) {
-        throw result.error;
+    const parsed = updateTransactionSchema.safeParse(transactionData);
+    if (!parsed.success) {
+        console.log(parsed.error.message);
+        throw new AppError(400, "Invalid request param");
     };
 
-    const validatedData = result.data;
+    const validatedData = parsed.data;
 
     const data = {
         status: 2 as 0 | 1 | 2,

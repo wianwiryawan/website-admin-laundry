@@ -5,6 +5,7 @@ import { eq } from 'drizzle-orm';
 import bcrypt from 'bcrypt';
 import { Json } from 'drizzle-zod';
 import { now } from '@/api/api.global';
+import { AppError } from '@/api/api.global';
 
 // Services: Handle business logic and talk to the database.
 
@@ -22,7 +23,8 @@ export const userSelfRegister = async (userData: Json) => {
     const parsed = registerUserSchema.safeParse(userData);
 
     if (!parsed.success){
-        throw parsed.error;
+        console.log(parsed.error.message);
+        throw new AppError(400, "Invalid request param");
     }
 
     const result = parsed.data;
@@ -56,7 +58,8 @@ export const adminAddUser = async (userData: Json, adminId: number) => {
     const parsed = adminCreateUserSchema.safeParse(userData);
     
     if (!parsed.success){
-        throw parsed.error;
+        console.log(parsed.error.message);
+        throw new AppError(400, "Invalid request param");
     }
 
     const result = parsed.data;
@@ -90,7 +93,8 @@ export const adminAddUser = async (userData: Json, adminId: number) => {
 export const updateUserById = async (userData: Json, adminId: number) => {
     const parsed = updateUserSchema.safeParse(userData);
     if (!parsed.success) {
-        throw parsed.error;
+        console.log(parsed.error.message);
+        throw new AppError(400, "Invalid request param");
     };
 
     const result = parsed.data;
@@ -120,7 +124,8 @@ export const updateUserById = async (userData: Json, adminId: number) => {
 export const passwordUpdateById = async (userData: Json) => {
     const parsed = updatePasswordSchema.safeParse(userData);
     if (!parsed.success) {
-        throw parsed.error;
+        console.log(parsed.error.message);
+        throw new AppError(400, "Invalid request param");
     }
 
     const result = parsed.data;
@@ -154,7 +159,8 @@ export const passwordUpdateById = async (userData: Json) => {
 export const softDeleteUserById = async (userId: number) => {
     const parsed = deleteUserSchema.safeParse(userId);
     if (!parsed.success) {
-        throw parsed.error;
+        console.log(parsed.error.message);
+        throw new AppError(400, "Invalid request param");
     }
 
     const result = parsed.data;

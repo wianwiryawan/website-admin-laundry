@@ -4,30 +4,29 @@ import { user } from "@/database/drizzle/schema";
 import { loginValidation } from './validation';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { AppError } from '@/api/api.global';
 
 // Services: Handle business logic and talk to the database.
 
 export const login = async (data: unknown) => {
     // validate data with zod
-    const result = loginValidation.safeParse(data);
-    
-    if (!result.success) {
-        throw new Error(result.error.message);
+    const parsed = loginValidation.safeParse(data);
+    if (!parsed.success) {
+        console.log(parsed.error.message);
+        throw new AppError(400, "Invalid request param");
     }
 
     // perform login logic (e.g., check username/password against database)
-    const user = await findUserByEmail(result.data.email);
-
+    const user = await findUserByEmail(parsed.data.email);
     if (!user) {
-        throw new Error("Invalid email or password");
+        throw new AppError(401, "Invalid email or password");
     }
 
     const userData = user[0];
 
-    const isValid = await checkPassword(result.data.password, userData.passwordHash); // Implement this function to compare passwords
-
+    const isValid = await checkPassword(parsed.data.password, userData.passwordHash); // Implement this function to compare passwords
     if (!isValid) {
-        throw new Error("Invalid email or password");
+        throw new AppError(401, "Invalid email or password");
     }
     
     const JWT_SECRET = process.env.JWT_SECRET;

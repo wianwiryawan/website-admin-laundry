@@ -3,6 +3,7 @@ import { db } from "@/database/drizzle/db";
 import { perfume } from '@/database/drizzle/schema';
 import { createPerfumeValidation, updatePerfumeValidation } from "./validation";
 import { now } from '@/api/api.global';
+import { AppError } from "@/api/api.global";
 
 // Services: Handle business logic and talk to the database.
 
@@ -17,12 +18,13 @@ export const getPerfumeById = async (perfumeId: number) => {
 };
 
 export const addPerfume = async (requestBody: unknown, adminId: number) => {
-    const result = createPerfumeValidation.safeParse(requestBody);
-    if(!result.success){
-        throw result.error;
+    const parsed = createPerfumeValidation.safeParse(requestBody);
+    if(!parsed.success){
+        console.log(parsed.error.message);
+        throw new AppError(400, "Invalid request param");
     };
 
-    const validatedData = result.data;
+    const validatedData = parsed.data;
 
     const data = {
         perfumeName: validatedData.perfumeName,
@@ -44,12 +46,13 @@ export const addPerfume = async (requestBody: unknown, adminId: number) => {
 };
 
 export const updatePerfume = async (requestBody: unknown, adminId: number) => {
-    const result = updatePerfumeValidation.safeParse(requestBody);
-    if (!result.success) {
-        throw result.error;
+    const parsed = updatePerfumeValidation.safeParse(requestBody);
+    if (!parsed.success) {
+        console.log(parsed.error.message);
+        throw new AppError(400, "Invalid request param");
     };
 
-    const validatedData = result.data;
+    const validatedData = parsed.data;
 
     const data = {
         perfumeName: validatedData.perfumeName,
@@ -74,12 +77,13 @@ export const updatePerfume = async (requestBody: unknown, adminId: number) => {
 };
 
 export const deletePerfume = async (requestBody: unknown, adminId: number) => {
-    const result = updatePerfumeValidation.safeParse(requestBody);
-    if (!result.success) {
-        throw result.error;
+    const parsed = updatePerfumeValidation.safeParse(requestBody);
+    if (!parsed.success) {
+        console.log(parsed.error.message);
+        throw new AppError(400, "Invalid request param");
     };
 
-    const validatedData = result.data;
+    const validatedData = parsed.data;
 
     const data = {
         status: 2 as 0 | 1 | 2,

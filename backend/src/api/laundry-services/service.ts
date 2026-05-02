@@ -3,6 +3,7 @@ import { db } from "@/database/drizzle/db";
 import { service } from '@/database/drizzle/schema';
 import { createLaundryServiceValidation, updateLaundryServiceValidation } from './validation';
 import { now } from '@/api/api.global';
+import { AppError } from "@/api/api.global";
 
 // Services: Handle business logic and talk to the database.
 
@@ -17,14 +18,14 @@ export const getLaundryById = async (serviceId: number) => {
 };
 
 export const addLaundryService = async (requestBody: unknown, adminId: number) => {
-    const result = createLaundryServiceValidation.safeParse(requestBody);
-    
-    if(!result.success){
-        throw result.error;
+    const parsed = createLaundryServiceValidation.safeParse(requestBody);
+    if(!parsed.success){
+        console.log(parsed.error.message);
+        throw new AppError(400, "Invalid request param");
     };
 
     // Destructure and pass the validated data to Drizzle insert
-    const validatedData = result.data;
+    const validatedData = parsed.data;
 
     const data = {
         serviceName: validatedData.serviceName,
@@ -48,13 +49,13 @@ export const addLaundryService = async (requestBody: unknown, adminId: number) =
 };
 
 export const updateLaundryServiceById = async (requestBody: unknown, adminId: number) => {
-    const result = updateLaundryServiceValidation.safeParse(requestBody);
-    
-    if(!result.success){
-        throw result.error;
+    const parsed = updateLaundryServiceValidation.safeParse(requestBody);
+    if(!parsed.success){
+        console.log(parsed.error.message);
+        throw new AppError(400, "Invalid request param");
     };
 
-    const validatedData = result.data;
+    const validatedData = parsed.data;
 
     const data = {
         serviceName: validatedData.serviceName,
@@ -81,12 +82,13 @@ export const updateLaundryServiceById = async (requestBody: unknown, adminId: nu
 };
 
 export const deleteLaundryService = async (requestBody: unknown, adminId: number) => {
-    const result = updateLaundryServiceValidation.safeParse(requestBody);
-    if (!result.success) {
-        throw result.error;
+    const parsed = updateLaundryServiceValidation.safeParse(requestBody);
+    if (!parsed.success) {
+        console.log(parsed.error.message);
+        throw new AppError(400, "Invalid request param");
     }
 
-    const validatedData = result.data;
+    const validatedData = parsed.data;
 
     const data = {
         status: 2 as 0 | 1 | 2,
