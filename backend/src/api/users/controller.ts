@@ -6,13 +6,18 @@ import { handleError } from '@/api/api.global';
 
 export const getAllUsersHandler = async (req: Request, res: Response) => {
     const result = await usersService.getAllUsers();
+    if (result.length == 0) {
+        return res.status(404).json({
+            message: 'Data not found',
+        });
+    };
     res.json(result);
 };
 
 export const getUserByIdHandler = async (req: Request, res: Response) => {
     try {
-        const id = Number(req.params.id);
-        const result = await usersService.getUserById(id);
+        const userId = Number(req.params.userId);
+        const result = await usersService.getUserById(userId);
         if(result.length == 0){
             return res.status(404).json({
                 message: 'Data not found',
@@ -21,55 +26,56 @@ export const getUserByIdHandler = async (req: Request, res: Response) => {
         res.json(result);
     } catch (error) {
         handleError(res, error);
-    }
-}
+    };
+};
 
 export const adminAddUserHandler = async (req: Request, res: Response) => {
     try {
-        const adminId = req.body.id;
+        const adminId = req.body.adminId;
         const result = await usersService.adminAddUser(req.body, adminId);
         res.status(201).json(result);
     } catch (error) {
         handleError(res, error);
-    }
+    };
 };
 
-export const userSelfRegisterHandler = async (req: Request, res: Response) => {
+export const userRegisterHandler = async (req: Request, res: Response) => {
     try {
         const result = await usersService.userSelfRegister(req.body);
         res.status(201).json(result);
     } catch (error) {
         handleError(res, error);
-    }
+    };
 };
 
 export const updateUserByIdHandler = async (req: Request, res: Response) => {
     try {
-        const id = Number(req.params.id);
-        const updateData = req.body;
-        const result = await usersService.updateUserById(id, updateData);
+        const requestBody = req.body;
+        const adminId = requestBody.adminId;
+        const result = await usersService.updateUserById(requestBody, adminId);
         res.json(result);
     } catch (error) {
         handleError(res, error);
-    }
-}
+    };
+};
 
 export const passwordUpdateByIdHandler = async (req: Request, res: Response) => {
     try {
-        const updateData = req.body;
-        const result = await usersService.passwordUpdateById(updateData);
+        const requestBody = req.body;
+        const result = await usersService.passwordUpdateById(requestBody);
         res.json(result);
     } catch (error) {
         handleError(res, error);
-    }
+    };
 };
 
 export const softDeleteUserByIdHandler = async (req: Request, res: Response) => {
     try {
-        const userId = Number(req.params.id);
-        const result = await usersService.softDeleteUserById(userId);
+        const userId = Number(req.params.userId);
+        const adminId = Number(req.body.adminId);
+        const result = await usersService.softDeleteUserById(userId, adminId);
         res.json(result);
     } catch (error) {
         handleError(res, error);
-    }
-}
+    };
+};
