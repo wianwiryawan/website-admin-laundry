@@ -54,9 +54,10 @@ export const updatePasswordSchema = z.object ({
     path: ['confirmPassword'],
 });
 
+
+// It is unused right now
 export const deleteUserSchema = z.object ({
     userId: z.number(),
-    status: userValidationLib.statusValidation,
 }).transform((data) => ({
     ...data,
     status: userValidationLib.statusMap.deleted, // Force delete
