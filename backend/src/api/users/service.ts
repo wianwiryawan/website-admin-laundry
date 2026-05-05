@@ -3,7 +3,6 @@ import { user } from '@/database/drizzle/schema';
 import { adminCreateUserSchema, updateUserSchema, updatePasswordSchema, deleteUserSchema, registerUserSchema } from './validation';
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcrypt';
-import { Json } from 'drizzle-zod';
 import { now } from '@/api/api.global';
 import { AppError } from '@/api/api.global';
 
@@ -19,7 +18,7 @@ export const getUserById = async (userId: number) => {
     );
 }
 
-export const userSelfRegister = async (userData: Json) => {
+export const userSelfRegister = async (userData: unknown) => {
     const parsed = registerUserSchema.safeParse(userData);
 
     if (!parsed.success){
@@ -29,12 +28,6 @@ export const userSelfRegister = async (userData: Json) => {
 
     const result = parsed.data;
 
-    if (result.password == result.confirmPassword) {
-        return {
-            message: "Password is invalid"
-        };
-    };
-
     const passwordHash = await bcrypt.hash(result.confirmPassword, 10);
 
     const data = {
@@ -43,18 +36,69 @@ export const userSelfRegister = async (userData: Json) => {
         address: result.address,
         email: result.email,
         passwordHash: passwordHash,
-        phoneNumber: result.phoneNumber,
         role: result.role as 0 | 1 | 2,
         status: result.status as 0 | 1 | 2,
         createdBy: 1 // System
     };
 
-    const inserted = await db
-        .insert(user)
-        .values(data);
+    try {
+        const inserted = await db
+            .insert(user)
+            .values(data)
+            .returning();
+        
+        return {
+            data: inserted[0],
+            message: "User created successfully"
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new AppError(500, error.message);
+        }
+        throw new AppError(500, "Failed to insert user");
+    }
 }
 
-export const adminAddUser = async (userData: Json, adminId: number) => {
+export const updateUserById = async (userData: unknown, adminId: number) => {
+    const parsed = updateUserSchema.safeParse(userData);
+    if (!parsed.success) {
+        console.log(parsed.error.message);
+        throw new AppError(400, "Invalid request param");
+    };
+
+    const result = parsed.data;
+
+    const data = {
+        name: result.name,
+        phoneNumber: result.phoneNumber,
+        address: result.address,
+        waAvailable: result.waAvailable,
+        status: result.status as 0 | 1 | 2,
+        updatedBy: adminId,
+        updatedDate: now(),
+    };
+
+    try {
+        const updated = await db.update(user)
+            .set(data)
+            .where(
+                eq(user.userId, result.userId)
+            )
+            .returning();
+    
+        return {
+            updated,
+            message: "User updated successfully"
+        };
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new AppError(500, error.message);
+        }
+        throw new AppError(500, "Failed to insert user");
+    }
+}
+
+export const adminAddUser = async (userData: unknown, adminId: number) => {
     const parsed = adminCreateUserSchema.safeParse(userData);
     
     if (!parsed.success){
@@ -79,49 +123,25 @@ export const adminAddUser = async (userData: Json, adminId: number) => {
         createdBy: adminId,
     };
 
-    // Use validated data
-    const inserted = await db
-        .insert(user)
-        .values(data);
+    try {
+        // Use validated data
+        const inserted = await db
+            .insert(user)
+            .values(data);
 
-    return {
-        inserted,
-        message: "User created successfully"
-    };
+        return {
+            inserted,
+            message: "User created successfully"
+        };   
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new AppError(500, error.message);
+        }
+        throw new AppError(500, "Failed to insert user");
+    }
 }
 
-export const updateUserById = async (userData: Json, adminId: number) => {
-    const parsed = updateUserSchema.safeParse(userData);
-    if (!parsed.success) {
-        console.log(parsed.error.message);
-        throw new AppError(400, "Invalid request param");
-    };
-
-    const result = parsed.data;
-
-    const data = {
-        name: result.name,
-        phoneNumber: result.phoneNumber,
-        address: result.address,
-        waAvailable: result.waAvailable,
-        status: result.status as 0 | 1 | 2,
-        updatedBy: adminId,
-        updatedDate: now(),
-    };
-
-    const updated = db.update(user)
-        .set(data)
-        .where(
-            eq(user.userId, result.userId)
-        );
-
-    return {
-        updated,
-        message: "User updated successfully"
-    };
-}
-
-export const passwordUpdateById = async (userData: Json) => {
+export const passwordUpdateById = async (userData: unknown) => {
     const parsed = updatePasswordSchema.safeParse(userData);
     if (!parsed.success) {
         console.log(parsed.error.message);
@@ -144,41 +164,56 @@ export const passwordUpdateById = async (userData: Json) => {
         ubdatedDate: now(),
     };
 
-    const updated = db.update(user)
-        .set(data)
-        .where(
-            eq(user.userId, result.userId)
-        );
-
-    return {
-        updated,
-        message: "User password updated successfully"
-    };
+    try {
+        const updated = await db.update(user)
+            .set(data)
+            .where(
+                eq(user.userId, result.userId)
+            )
+            .returning();
+    
+        return {
+            updated,
+            message: "User password updated successfully"
+        };
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new AppError(500, error.message);
+        }
+        throw new AppError(500, "Failed to insert user");
+    }
 }
 
-export const softDeleteUserById = async (userId: number) => {
-    const parsed = deleteUserSchema.safeParse(userId);
-    if (!parsed.success) {
-        console.log(parsed.error.message);
-        throw new AppError(400, "Invalid request param");
+export const softDeleteUserById = async (userId: number, adminId: number) => {
+    if(userId === 1) {
+        console.log("Forbidden to delete system user");
+        throw new AppError(400, "Forbidden");
     }
 
-    const result = parsed.data;
-
     const data = {
-        status: 2 as 2,
-        updatedBy: result.userId,
+        status: 2 as 0 | 1 | 2,
+        updatedBy: userId,
+        deletedBy: adminId,
         updatedDate: now(),
+        deletedDate: now(),
     };
 
-    const deleted = db.update(user)
-        .set(data)
-        .where(
-            eq(user.userId, result.userId)
-        );
-    
-    return {
-        deleted,
-        message: "User deleted successfully"
-    };
+    try {
+        const deleted = await db.update(user)
+            .set(data)
+            .where(
+                eq(user.userId, userId)
+            )
+            .returning();
+        
+        return {
+            deleted,
+            message: "User deleted successfully"
+        };
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new AppError(500, error.message);
+        }
+        throw new AppError(500, "Failed to insert user");
+    }
 }
