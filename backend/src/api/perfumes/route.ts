@@ -4,7 +4,13 @@ import * as perfumeController from './controller';
 const router = Router();
 
 // List all perfume
-router.get('/', perfumeController.getAllPerfumesHandler);
+router.get('/', async (req, res, next) => {
+    try {
+        perfumeController.getAllPerfumesHandler(req, res);
+    } catch (error) {
+        next(error);
+    }
+});
 
 // Add new perfume
 router.post('/add', async (req, res, next) => {
@@ -25,7 +31,7 @@ router.get('/:id', async (req, res, next) => {
 });
 
 // Edit perfume by id
-router.put('/edit/:id', async (req, res, next) => {
+router.put('/edit', async (req, res, next) => {
     try {
         await perfumeController.updatePerfumeHandler(req, res);
     } catch (error) {
@@ -34,9 +40,9 @@ router.put('/edit/:id', async (req, res, next) => {
 });
 
 // Soft delete perfume by id
-router.put('/delete/:id', async (req, res, next) => {
+router.delete('/delete/:id', async (req, res, next) => {
     try {
-        await perfumeController.deletePerfumeHandler(req, res);
+        await perfumeController.softDeletePerfumeHandler(req, res);
     } catch (error) {
         next(error);
     }
