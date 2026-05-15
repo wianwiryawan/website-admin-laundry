@@ -14,8 +14,12 @@ import { service } from '@/database/drizzle/schema';
 const insertLaundryServiceSchema = createInsertSchema(service);
 const updateLaundryServiceSchema = createInsertSchema(service);
 
-export const createLaundryServiceValidation = insertLaundryServiceSchema;
-export const updateLaundryServiceValidation = updateLaundryServiceSchema.extend ({
+export const createLaundryServiceValidation = insertLaundryServiceSchema.omit({
+    createdBy: true,
+});
+export const updateLaundryServiceValidation = updateLaundryServiceSchema.omit({
+    createdBy: true,
+}).extend ({
     serviceId: z.number(),
 });
 
