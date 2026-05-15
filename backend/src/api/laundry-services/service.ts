@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 import { db } from "@/database/drizzle/db";
 import { service } from '@/database/drizzle/schema';
 import { createLaundryServiceValidation, updateLaundryServiceValidation } from './validation';
@@ -8,7 +8,7 @@ import { AppError } from "@/api/api.global";
 // Services: Handle business logic and talk to the database.
 
 export const getAllLaundryServices = async () => {
-    return db.select().from(service);
+    return db.select().from(service).orderBy(asc(service.serviceId));
 };
 
 export const getLaundryById = async (serviceId: number) => {
@@ -24,7 +24,6 @@ export const addLaundryService = async (requestBody: unknown, adminId: number) =
         throw new AppError(400, "Invalid request param");
     };
 
-    // Destructure and pass the validated data to Drizzle insert
     const validatedData = parsed.data;
 
     const data = {
@@ -37,15 +36,23 @@ export const addLaundryService = async (requestBody: unknown, adminId: number) =
     };
 
     // Use validated data
-    const inserted = await db
-        .insert(service)
-        .values(data)
-        .returning();
+    try {
+        const inserted = await db
+            .insert(service)
+            .values(data)
+            .returning();
+    
+        return {
+            data: inserted[0].serviceName,
+            message: "Laundry service created successfully"
+        };
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new AppError(500, error.message);
+        };
 
-    return {
-        data: inserted[0].serviceName,
-        message: "Laundry service created successfully"
-    };
+        throw new AppError(500, "Failed to insert laundry service");
+    }
 };
 
 export const updateLaundryServiceById = async (requestBody: unknown, adminId: number) => {
@@ -81,15 +88,7 @@ export const updateLaundryServiceById = async (requestBody: unknown, adminId: nu
     };
 };
 
-export const deleteLaundryService = async (requestBody: unknown, adminId: number) => {
-    const parsed = updateLaundryServiceValidation.safeParse(requestBody);
-    if (!parsed.success) {
-        console.log(parsed.error.message);
-        throw new AppError(400, "Invalid request param");
-    }
-
-    const validatedData = parsed.data;
-
+export const softDeleteLaundryService = async (serviceId: number, adminId: number) => {
     const data = {
         status: 2 as 0 | 1 | 2,
         deletedDate: now(),
@@ -100,9 +99,13 @@ export const deleteLaundryService = async (requestBody: unknown, adminId: number
         .update(service)
         .set(data)
         .where(
-            eq(service.serviceId, validatedData.serviceId)
+            eq(service.serviceId, serviceId)
         )
         .returning();
+
+    if (!deleted.length) {
+        throw new AppError(404, "Data does not exist");
+    }
 
     return {
         data: deleted[0].serviceName,
