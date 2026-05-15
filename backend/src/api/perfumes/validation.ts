@@ -7,7 +7,10 @@ import z from 'zod';
 const insertSchema = createInsertSchema(perfume);
 const updateSchema = createUpdateSchema(perfume);
 
-export const createPerfumeValidation = insertSchema;
+export const createPerfumeValidation = insertSchema.omit({
+    createdBy: true,
+});
+
 export const updatePerfumeValidation = updateSchema.extend({
     perfumeId: z.number(),
 });
