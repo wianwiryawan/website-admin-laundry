@@ -6,16 +6,7 @@ const router = Router();
 // List all laundry service
 router.get('/', async (req, res, next) => {
     try {
-        laundryServiceController.getAllLaundryServicesHandler(res);
-    } catch (error) {
-        next(error);
-    }
-});
-
-// Add new laundry service
-router.post('/add', async (req, res, next) => {
-    try {
-        await laundryServiceController.addLaundryServiceHandler(req, res);
+        laundryServiceController.getAllLaundryServicesHandler(req, res);
     } catch (error) {
         next(error);
     }
@@ -30,8 +21,17 @@ router.get('/:id', async (req, res, next) => {
     }
 });
 
+// Add new laundry service
+router.post('/add', async (req, res, next) => {
+    try {
+        await laundryServiceController.addLaundryServiceHandler(req, res);
+    } catch (error) {
+        next(error);
+    }
+});
+
 // Edit existing laundry service by id
-router.get('/edit', async (req, res, next) => {
+router.put('/edit', async (req, res, next) => {
     try {
         await laundryServiceController.updateLaundryServiceHandler(req, res);
     } catch (error) {
@@ -40,9 +40,9 @@ router.get('/edit', async (req, res, next) => {
 })
 
 // Soft delete existing laundry service by id
-router.put('/delete', async (req, res, next) => {
+router.delete('/delete/:id', async (req, res, next) => {
     try {
-        await laundryServiceController.deleteLaundryServiceHandler(req, res);
+        await laundryServiceController.softDeleteLaundryServiceHandler(req, res);
     } catch (error) {
         next(error);
     }
