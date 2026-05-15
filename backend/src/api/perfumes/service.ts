@@ -37,11 +37,12 @@ export const addPerfume = async (requestBody: unknown, adminId: number) => {
     // Use validated data
     const inserted = await db
         .insert(perfume)
-        .values(data);
+        .values(data)
+        .returning();
 
     return {
-        inserted,
-        message: "User created successfully"
+        data: inserted[0],
+        message: "Perfume created successfully"
     };
 };
 
@@ -63,42 +64,51 @@ export const updatePerfume = async (requestBody: unknown, adminId: number) => {
         updatedBy: adminId,
     };
 
-    const updated = await db
-        .update(perfume)
-        .set(data)
-        .where(
-            eq(perfume.perfumeId, validatedData.perfumeId)
-        );
-    
-    return {
-        updated,
-        message: "Data successfully updated"
-    };
+    try {
+        const updated = await db
+            .update(perfume)
+            .set(data)
+            .where(
+                eq(perfume.perfumeId, validatedData.perfumeId)
+            )
+            .returning();
+        
+        return {
+            data: updated[0],
+            message: "Perfume successfully updated"
+        };
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new AppError(500, error.message);
+        };
+
+        throw new AppError(500, "Failed to insert laundry service");
+    }
+
 };
 
-export const deletePerfume = async (requestBody: unknown, adminId: number) => {
-    const parsed = updatePerfumeValidation.safeParse(requestBody);
-    if (!parsed.success) {
-        console.log(parsed.error.message);
-        throw new AppError(400, "Invalid request param");
-    };
-
-    const validatedData = parsed.data;
-
+export const softDeletePerfume = async (perfumeId: number, adminId: number) => {
     const data = {
         status: 2 as 0 | 1 | 2,
         updatedBy: adminId,
+        deletedDate: now(),
+        deletedBy: adminId,
     };
 
     const deleted = await db
         .update(perfume)
         .set(data)
         .where(
-            eq(perfume.perfumeId, validatedData.perfumeId)
-        );
+            eq(perfume.perfumeId, perfumeId)
+        )
+        .returning();
     
+    if (!deleted.length) {
+        throw new AppError(404, "Data does not exist");
+    }
+
     return {
-        deleted,
+        data: deleted[0].perfumeName,
         message: "Data successfully deleted"
     };
 };
