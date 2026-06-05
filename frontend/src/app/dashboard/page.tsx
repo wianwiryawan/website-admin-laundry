@@ -1,11 +1,11 @@
+"use client";
+
 import { AppSidebar } from "@/app/ui/app-sidebar"
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
+  BreadcrumbList
 } from "@/app/ui/breadcrumb"
 import { Separator } from "@/app/ui/separator"
 import {
@@ -13,8 +13,10 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/app/ui/sidebar"
+import { useRouter } from "next/navigation";
 
 export default function Dashboard() {
+  const router = useRouter();
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -29,13 +31,9 @@ export default function Dashboard() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                    Building Your Application
+                  <BreadcrumbLink href="/dashboard">
+                    Wijaya Laundry Express
                   </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
